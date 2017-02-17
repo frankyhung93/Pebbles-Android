@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.pebblesappv2.TdlAddNewActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tdl_adn_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:text="Date: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="16dp"
+            android:id="@+id/adn_date_label" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:layout_below="@+id/adn_date_label"
+            android:layout_alignLeft="@+id/adn_date_label"
+            android:layout_alignStart="@+id/adn_date_label"
+            android:layout_marginTop="14dp"
+            android:id="@+id/adn_date_input" />
+
+        <TextView
+            android:text="Time:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/adn_date_input"
+            android:layout_alignLeft="@+id/adn_date_input"
+            android:layout_alignStart="@+id/adn_date_input"
+            android:layout_marginTop="15dp"
+            android:id="@+id/adn_time_label" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:layout_below="@+id/adn_time_label"
+            android:layout_alignLeft="@+id/adn_time_label"
+            android:layout_alignStart="@+id/adn_time_label"
+            android:layout_marginTop="18dp"
+            android:id="@+id/adn_time_input" />
+
+        <TextView
+            android:text="Task / Description:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/adn_time_input"
+            android:layout_alignLeft="@+id/adn_time_input"
+            android:layout_alignStart="@+id/adn_time_input"
+            android:layout_marginTop="17dp"
+            android:id="@+id/adn_desc_label" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:layout_below="@+id/adn_desc_label"
+            android:layout_alignLeft="@+id/adn_desc_label"
+            android:layout_alignStart="@+id/adn_desc_label"
+            android:layout_marginTop="13dp"
+            android:id="@+id/adn_desc_input"
+            android:hint="description here..."/>
+
+        <Button
+            android:text="CANCEL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/adn_ok_butt"
+            android:layout_toRightOf="@+id/adn_ok_butt"
+            android:layout_toEndOf="@+id/adn_ok_butt"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:id="@+id/adn_cancel_btn" />
+
+        <Button
+            android:text="OKAY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:id="@+id/adn_ok_butt"
+            android:layout_marginLeft="35dp"
+            android:layout_marginStart="35dp"
+            android:layout_below="@+id/adn_desc_input"
+            android:layout_toRightOf="@+id/adn_time_label"
+            android:layout_toEndOf="@+id/adn_time_label" />
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

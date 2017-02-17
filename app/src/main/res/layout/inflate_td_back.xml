@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:background="@color/colorRed">
+
+        <ImageView
+            android:id="@+id/td_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:layout_column="0"
+            android:src="@drawable/rubbish_bin"
+            />
+
+        <Button
+            android:id="@+id/td_item_del_icon"
+            android:layout_column="1"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            />
+ </GridLayout>

@@ -1,5 +1,10 @@
 package com.example.pebblesappv2;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by ChunFaiHung on 2017/2/12.
  */
@@ -45,4 +50,16 @@ public class ToDoItem {
         this.todoTime = setTime;
     }
     public void setToDoDate(String setDate) { this.todoDate = setDate; }
+
+    public Date getDateFromString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date returnDate;
+        try {
+            returnDate = sdf.parse(this.todoDate);
+            return returnDate;
+        } catch (Exception e) {
+            Log.d("ParseException", e.getMessage().toString());
+            return null;
+        }
+    }
 }

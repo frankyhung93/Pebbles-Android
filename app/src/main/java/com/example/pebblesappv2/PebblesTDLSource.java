@@ -22,7 +22,7 @@ public class PebblesTDLSource {
             PebbleSQLHelper.COLUMN_LUPDATE_TIME};
 
     public PebblesTDLSource(Context context) {
-        dbHelper = new PebbleSQLHelper(context);
+        dbHelper = PebbleSQLHelper.getInstance(context);
     }
 
     public void open() throws SQLException {
@@ -46,6 +46,25 @@ public class PebblesTDLSource {
         ToDoItem toDoItem = cursorToTDItem(cursor);
         cursor.close();
         return toDoItem;
+    }
+
+    public ToDoItem UpdateTDItem(String desc, String time, String date, long org_id) {
+        long milis = System.currentTimeMillis();
+        ContentValues values = new ContentValues();
+        values.put(PebbleSQLHelper.COLUMN_DATE, date);
+        values.put(PebbleSQLHelper.COLUMN_TIME, time);
+        values.put(PebbleSQLHelper.COLUMN_DESC, desc);
+        values.put(PebbleSQLHelper.COLUMN_LUPDATE_TIME, milis);
+        database.update(PebbleSQLHelper.TABLE_NAME, values, PebbleSQLHelper.COLUMN_ID + " = " + org_id, null);
+        Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME, allColumns, PebbleSQLHelper.COLUMN_ID + " = " + org_id, null, null, null, null);
+        cursor.moveToFirst();
+        ToDoItem toDoItem = cursorToTDItem(cursor);
+        cursor.close();
+        return toDoItem;
+    }
+
+    public void DeleteTDItem(long td_id) {
+        database.delete(PebbleSQLHelper.TABLE_NAME, PebbleSQLHelper.COLUMN_ID + " = " + td_id, null);
     }
 
     public ArrayList<ToDoItem> getTDL() {

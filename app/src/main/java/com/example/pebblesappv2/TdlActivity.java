@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.daimajia.swipe.SwipeLayout;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,8 @@ public class TdlActivity extends AppCompatActivity implements NavigationView.OnN
     public ArrayList<ToDoItem> tdl_data = new ArrayList<ToDoItem>();
     public PebblesTDLSource tdl_source;
     public TdlArrayAdapter tdl_adapter;
+    private int update_position;
+    private long update_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +61,34 @@ public class TdlActivity extends AppCompatActivity implements NavigationView.OnN
         tdl_data = tdl_source.getTDL();
 
         // Initializing custom adapter
-        tdl_adapter = new TdlArrayAdapter(this, R.layout.inflate_td_item, tdl_data);
+        tdl_adapter = new TdlArrayAdapter(this, tdl_data);
 
         ListView tdl_listView = (ListView) findViewById(R.id.tdl_listview);
         tdl_listView.setEmptyView(findViewById(R.id.empty_view_tdl_text));
 
         // Set adapter for the listView
         tdl_listView.setAdapter(tdl_adapter);
+        tdl_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ToDoItem orgItem = tdl_data.get(position);
+                update_position = position;
+                update_id = orgItem.getId();
+                Intent updateI = new Intent(TdlActivity.this, TdlUpdateActivity.class);
+                updateI.putExtra("Org_Date", orgItem.getToDoDate());
+                updateI.putExtra("Org_Time", orgItem.getToDoTime());
+                updateI.putExtra("Org_Desc", orgItem.getToDoDesc());
+//                updateI.putExtra("Org_Id", orgItem.getId());
+                startActivityForResult(updateI,1);
+            }
+        });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        tdl_source.close();
+        super.onDestroy();
     }
 
     @Override
@@ -94,7 +119,7 @@ public class TdlActivity extends AppCompatActivity implements NavigationView.OnN
         if (id == R.id.action_add_td) {
             startActivityForResult(
                     new Intent(TdlActivity.this, TdlAddNewActivity.class),
-                    GET_RESULT_TEXT);
+                    0);
             return true;
         }
 
@@ -109,8 +134,21 @@ public class TdlActivity extends AppCompatActivity implements NavigationView.OnN
                                         data.getStringExtra("timeInput"),
                                         data.getStringExtra("dateInput"));
                 tdl_data.add(newTDItem);
+                tdl_adapter.closeAllItems();
                 tdl_adapter.notifyDataSetChanged();
                 Log.d("DEBUG", newTDItem.getToDoDesc());
+            }
+        } else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                ToDoItem updatedItem = tdl_source.UpdateTDItem(
+                        data.getStringExtra("descInput"),
+                        data.getStringExtra("timeInput"),
+                        data.getStringExtra("dateInput"),
+                        update_id);
+                tdl_data.set(update_position, updatedItem);
+                tdl_adapter.closeAllItems();
+                tdl_adapter.notifyDataSetChanged();
+                Log.d("DEBUG", updatedItem.getToDoDesc());
             }
         }
     }

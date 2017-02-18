@@ -30,6 +30,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="com.example.pebblesappv2.TdlUpdateActivity"
+            android:label="Update To-Do-Item"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

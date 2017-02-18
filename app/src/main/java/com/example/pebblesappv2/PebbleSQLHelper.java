@@ -10,6 +10,8 @@ import android.util.Log;
  */
 
 public class PebbleSQLHelper extends SQLiteOpenHelper{
+    private static PebbleSQLHelper sInstance;
+
     public static final String TABLE_NAME = "pebbles_tdl";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DATE = "td_date";
@@ -17,7 +19,7 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
     public static final String COLUMN_DESC = "td_desc";
     public static final String COLUMN_LUPDATE_TIME = "td_lupdate_time";
 
-    private static final String DATABASE_NAME = "pebbles.db";
+    private static final String DATABASE_NAME = "pebblesv2.db";
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_CREATE = "CREATE TABLE " +
@@ -34,7 +36,17 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
                                                         COLUMN_LUPDATE_TIME +
                                                         " integer not null);";
 
-    public PebbleSQLHelper(Context context) {
+    public static synchronized PebbleSQLHelper getInstance(Context context) {
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new PebbleSQLHelper(context);
+        }
+        return sInstance;
+    }
+
+    private PebbleSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

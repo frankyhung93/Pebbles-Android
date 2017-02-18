@@ -6,19 +6,45 @@
         android:orientation="horizontal"
         android:background="@color/colorRed">
 
-        <ImageView
-            android:id="@+id/td_icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:layout_column="0"
-            android:src="@drawable/rubbish_bin"
-            />
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_column="0">
+
+            <ImageView
+                android:id="@+id/td_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_column="0"
+                android:src="@drawable/rubbish_bin"
+                />
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/td_icon"
+                android:textSize="15dp"
+                android:text="Confirm removal?"/>
+        </RelativeLayout>
 
         <Button
             android:id="@+id/td_item_del_icon"
             android:layout_column="1"
             android:layout_width="80dp"
-            android:layout_height="30dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="10dp"
+            android:text="DELETE"
             />
  </GridLayout>

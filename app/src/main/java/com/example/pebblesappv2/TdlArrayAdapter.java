@@ -16,9 +16,14 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.ArraySwipeAdapter;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  * Created by ChunFaiHung on 2017/2/12.
@@ -29,6 +34,7 @@ public class TdlArrayAdapter extends BaseSwipeAdapter {
     private final Context context;
     private ArrayList<ToDoItem> tdl_data = new ArrayList<ToDoItem>();
     public PebblesTDLSource tdl_source;
+    public String[] dayOfWeekArr = {"Null","Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"};
 
     // TUTORIAL / GUIDE:
     // The three parameters for the custom array adapter must be present
@@ -78,11 +84,31 @@ public class TdlArrayAdapter extends BaseSwipeAdapter {
         this_row = tdl_data.get(position);
 
         TextView tdl_dateView = (TextView) swipeLayout.findViewById(R.id.td_date);
+        TextView tdl_dayOfView = (TextView) swipeLayout.findViewById(R.id.td_dayOfWeek);
         TextView tdl_timeView = (TextView) swipeLayout.findViewById(R.id.td_time);
         TextView tdl_descView = (TextView) swipeLayout.findViewById(R.id.td_desc);
         tdl_dateView.setText(this_row.getToDoDate());
+        Calendar c = Calendar.getInstance();
+        int dayOfWeek;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date targetDate;
+        try {
+            targetDate = df.parse(this_row.getToDoDate());
+        } catch (ParseException e) {
+            Log.d("Exception", e.getMessage());
+            targetDate = null;
+        }
+        c.setTime(targetDate);
+        if (targetDate == null) {
+            dayOfWeek = 0;
+        } else {
+            dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        }
+        tdl_dayOfView.setText(dayOfWeekArr[dayOfWeek]);
         tdl_timeView.setText(this_row.getToDoTime());
         tdl_descView.setText(this_row.getToDoDesc());
+
+        Log.d("DEBUG", dayOfWeek+" ");
     }
     @Override
     public void notifyDataSetChanged() {

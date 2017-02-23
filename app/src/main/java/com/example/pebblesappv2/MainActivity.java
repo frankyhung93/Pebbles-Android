@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
     }
 
     @Override
@@ -88,8 +89,11 @@ public class MainActivity extends AppCompatActivity
             String message = "TDL So Many";
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.routines_page) {
+            Intent intent = new Intent(this, RoutinesActivity.class);
+            String message = "Grids So Many";
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

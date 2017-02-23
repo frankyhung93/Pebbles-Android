@@ -36,6 +36,18 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name="com.example.pebblesappv2.RoutinesActivity"
+            android:label="All Routines"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.example.pebblesappv2.RoutinesAddActivity"
+            android:label="Add a Routine"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 
 </manifest>

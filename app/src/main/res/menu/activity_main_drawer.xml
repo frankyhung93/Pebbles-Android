@@ -7,9 +7,9 @@
             android:icon="@drawable/write"
             android:title="To-Do List" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/routines_page"
+            android:icon="@drawable/pie_chart_1"
+            android:title="Routines Grid" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"

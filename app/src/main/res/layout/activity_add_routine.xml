@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Use a relative layout for the empty textview just under the listview -->
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.pebblesappv2.RoutinesAddActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/add_routine_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:text="Routine Icon:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="28dp"
+            android:id="@+id/add_routine_icon_label"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_menu_gallery"
+            android:id="@+id/add_routine_icon_button"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp" />
+
+        <TextView
+            android:text="Routine Name:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:id="@+id/add_routine_name_label"
+            android:layout_below="@+id/add_routine_icon_button"
+            android:layout_alignLeft="@+id/add_routine_icon_label"
+            android:layout_alignStart="@+id/add_routine_icon_label" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:layout_below="@+id/add_routine_name_label"
+            android:layout_alignLeft="@+id/add_routine_name_label"
+            android:layout_alignStart="@+id/add_routine_name_label"
+            android:layout_marginTop="11dp"
+            android:id="@+id/add_routine_name_input"
+            android:hint="Enter routine name..."
+            android:layout_marginRight="15dp" />
+
+        <Button
+            android:text="OKAY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_routine_name_input"
+            android:layout_toLeftOf="@+id/add_routine_icon_button"
+            android:layout_toStartOf="@+id/add_routine_icon_button"
+            android:layout_marginTop="40dp"
+            android:id="@+id/add_routine_ok_button" />
+
+        <Button
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/add_routine_ok_button"
+            android:layout_toRightOf="@+id/add_routine_icon_button"
+            android:layout_toEndOf="@+id/add_routine_icon_button"
+            android:id="@+id/add_routine_cancel_button" />
+
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

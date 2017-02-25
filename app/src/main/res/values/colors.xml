@@ -4,7 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorRed">#FF0000</color>
-    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhite">#ffffff</color>
     <color name="colorNaval">#3344ff</color>
     <color name="colorLightGreen">#90ffb3</color>
+    <color name="colorGrey">#a1a1a1</color>
+    <color name="colorDynamic">#FFFFFF</color>
 </resources>

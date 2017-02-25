@@ -72,16 +72,6 @@
             android:layout_marginRight="15dp" />
 
         <Button
-            android:text="OKAY"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add_routine_name_input"
-            android:layout_toLeftOf="@+id/add_routine_icon_button"
-            android:layout_toStartOf="@+id/add_routine_icon_button"
-            android:layout_marginTop="40dp"
-            android:id="@+id/add_routine_ok_button" />
-
-        <Button
             android:text="Cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,6 +79,54 @@
             android:layout_toRightOf="@+id/add_routine_icon_button"
             android:layout_toEndOf="@+id/add_routine_icon_button"
             android:id="@+id/add_routine_cancel_button" />
+
+        <TextView
+            android:text="Background Color:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:layout_below="@+id/add_routine_name_input"
+            android:layout_alignLeft="@+id/add_routine_name_input"
+            android:layout_alignStart="@+id/add_routine_name_input"
+            android:layout_marginTop="13dp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/colorWhite"
+            android:layout_below="@+id/add_routine_name_input"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/add_routine_color_button"
+            android:elevation="5dp" />
+
+        <Button
+            android:text="OKAY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_routine_ok_button"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/add_routine_textcolor_label"
+            android:layout_toLeftOf="@+id/add_routine_icon_button"
+            android:layout_toStartOf="@+id/add_routine_icon_button" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/colorWhite"
+            android:id="@+id/add_routine_txcolor_button"
+            android:elevation="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/add_routine_cancel_button"
+            android:layout_toStartOf="@+id/add_routine_cancel_button" />
+
+        <TextView
+            android:text="Routine Text Color:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignLeft="@+id/textView3"
+            android:layout_alignStart="@+id/textView3"
+            android:id="@+id/add_routine_textcolor_label" />
 
     </RelativeLayout>
 

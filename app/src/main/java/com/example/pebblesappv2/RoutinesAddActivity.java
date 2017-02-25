@@ -1,6 +1,7 @@
 package com.example.pebblesappv2;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 /**
  * Created by ChunFaiHung on 2017/2/23.
@@ -21,6 +28,9 @@ import android.widget.ImageButton;
 
 public class RoutinesAddActivity extends AppCompatActivity {
     private ImageButton add_routine_icon_butt;
+    private ImageView add_routine_color_butt;
+    private ImageView add_routine_txcolor_butt;
+    private int currentBackgroundColor = 0xffffffff;
     private Integer chosen_icon_id;
 
 
@@ -75,6 +85,70 @@ public class RoutinesAddActivity extends AppCompatActivity {
             }
         });
 
+        add_routine_color_butt = (ImageView) findViewById(R.id.add_routine_color_button);
+        add_routine_color_butt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ColorPickerDialogBuilder
+                        .with(RoutinesAddActivity.this)
+                        .setTitle("Choose color")
+                        .initialColor(currentBackgroundColor)
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .density(12)
+                        .setOnColorSelectedListener(new OnColorSelectedListener() {
+                            @Override
+                            public void onColorSelected(int selectedColor) {
+                                Log.d("DEBUG", Integer.toHexString(selectedColor));
+                            }
+                        })
+                        .setPositiveButton("ok", new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                changeBackgroundColor(selectedColor, "bg");
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .build()
+                        .show();
+            }
+        });
+
+        add_routine_txcolor_butt = (ImageView) findViewById(R.id.add_routine_txcolor_button);
+        add_routine_txcolor_butt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ColorPickerDialogBuilder
+                        .with(RoutinesAddActivity.this)
+                        .setTitle("Choose color")
+                        .initialColor(currentBackgroundColor)
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .density(12)
+                        .setOnColorSelectedListener(new OnColorSelectedListener() {
+                            @Override
+                            public void onColorSelected(int selectedColor) {
+                                Log.d("DEBUG", Integer.toHexString(selectedColor));
+                            }
+                        })
+                        .setPositiveButton("ok", new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                changeBackgroundColor(selectedColor, "tx");
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .build()
+                        .show();
+            }
+        });
+
     }
 
     public void sendResult() {
@@ -85,8 +159,20 @@ public class RoutinesAddActivity extends AppCompatActivity {
     }
 
     private void showIconDialog(Dialog iconDialog) {
-        iconDialog.getWindow().setLayout(900, 800); //Controlling width and height.
         iconDialog.show();
+        iconDialog.getWindow().setLayout(1100, 1000); //Controlling width and height.
     }
 
+    private void changeBackgroundColor(int selectedColor, String type) {
+        switch (type) {
+            case "bg":
+                add_routine_color_butt.setBackgroundColor(selectedColor);
+                break;
+            case "tx":
+                add_routine_txcolor_butt.setBackgroundColor(selectedColor);
+                break;
+            default:
+                break;
+        }
+    }
 }

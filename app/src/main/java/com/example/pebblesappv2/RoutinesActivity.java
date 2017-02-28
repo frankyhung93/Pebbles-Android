@@ -1,7 +1,9 @@
 package com.example.pebblesappv2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,11 +14,17 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by ChunFaiHung on 2017/2/22.
  */
 
 public class RoutinesActivity extends AppCompatActivity {
+    public ArrayList<RoutineItem> routine_data = new ArrayList<RoutineItem>();
+    public PebblesTDLSource rt_source;
+    public RoutinesGridAdapter rt_adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,15 +33,56 @@ public class RoutinesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.routines_toolbar);
         setSupportActionBar(toolbar);
 
+        // Fetch grid data
+        routine_data.clear();
+        rt_source = new PebblesTDLSource(this);
+        rt_source.open();
+        routine_data = rt_source.getRoutines();
+
         GridView gridview = (GridView) findViewById(R.id.routines_gridview);
-        gridview.setAdapter(new RoutinesGridAdapter(this));
+        rt_adapter = new RoutinesGridAdapter(this, routine_data);
+        gridview.setAdapter(rt_adapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Log.d("DEBUG", position + " ");
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("DEBUG", "THIS ICON ID = "+routine_data.get(i).getRtId());
             }
         });
+
+        gridview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int position = i;
+                AlertDialog.Builder builder = new AlertDialog.Builder(RoutinesActivity.this);
+                builder.setMessage("Delete this Routine Item?")
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                long itemId = rt_adapter.getItemId(position);
+                                rt_source.DeleteRoutineItem(itemId);
+                                routine_data.remove(position);
+                                rt_adapter.notifyDataSetChanged();
+                                Log.d("DEBUG", "ITEM "+itemId+" is DELETED.");
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Toast.makeText(RoutinesActivity.this, "Deletion cancelled...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                // Create the AlertDialog object and return it
+                builder.create();
+                builder.show();
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        rt_source.close();
+        super.onDestroy();
     }
 
     @Override
@@ -64,8 +113,17 @@ public class RoutinesActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-
+                Log.d("DEBUG", data.getLongExtra("icon_id_input",-1) +" - "+data.getStringExtra("icon_name_input"));
+                RoutineItem new_rtItem = rt_source.CreateRoutineItem(data.getLongExtra("icon_id_input", -1),
+                                                                    data.getStringExtra("icon_name_input"),
+                                                                    data.getLongExtra("icon_bg_color", -1),
+                                                                    data.getLongExtra("icon_tx_color", -1));
+                if (new_rtItem != null) {
+                    routine_data.add(new_rtItem);
+                    rt_adapter.notifyDataSetChanged();
+                }
             }
         }
     }
+
 }

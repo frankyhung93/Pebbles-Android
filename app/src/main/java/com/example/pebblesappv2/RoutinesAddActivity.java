@@ -3,6 +3,7 @@ package com.example.pebblesappv2;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
@@ -30,6 +32,7 @@ public class RoutinesAddActivity extends AppCompatActivity {
     private ImageButton add_routine_icon_butt;
     private ImageView add_routine_color_butt;
     private ImageView add_routine_txcolor_butt;
+    private TextView add_routine_icon_name;
     private int currentBackgroundColor = 0xffffffff;
     private Integer chosen_icon_id;
 
@@ -57,6 +60,7 @@ public class RoutinesAddActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 add_routine_icon_butt.setImageResource((int)dialogGridAdapter.getItemId(position));
+                add_routine_icon_butt.setScaleType(ImageView.ScaleType.FIT_XY);
                 chosen_icon_id = (int)dialogGridAdapter.getItemId(position);
                 iconDialog.dismiss();
             }
@@ -152,8 +156,18 @@ public class RoutinesAddActivity extends AppCompatActivity {
     }
 
     public void sendResult() {
+        add_routine_icon_name = (TextView) findViewById(R.id.add_routine_name_input);
+        add_routine_color_butt = (ImageView) findViewById(R.id.add_routine_color_button);
+        add_routine_txcolor_butt = (ImageView) findViewById(R.id.add_routine_txcolor_button);
+        ColorDrawable color_bg = (ColorDrawable) add_routine_color_butt.getBackground();
+        ColorDrawable color_tx = (ColorDrawable) add_routine_txcolor_butt.getBackground();
+
         Intent i = new Intent();
 //        i.putExtra("dateInput", dateInput);
+        i.putExtra("icon_id_input", (long)chosen_icon_id);
+        i.putExtra("icon_name_input", add_routine_icon_name.getText().toString());
+        i.putExtra("icon_bg_color", (long)color_bg.getColor());
+        i.putExtra("icon_tx_color", (long)color_tx.getColor());
         setResult(RESULT_OK, i);
         finish();
     }

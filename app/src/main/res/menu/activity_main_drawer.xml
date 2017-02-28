@@ -11,9 +11,9 @@
             android:icon="@drawable/pie_chart_1"
             android:title="Routines Grid" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/weekly_rt_page"
+            android:icon="@drawable/weekly_calendar"
+            android:title="Weekly Routines" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

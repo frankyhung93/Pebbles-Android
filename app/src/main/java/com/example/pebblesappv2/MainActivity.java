@@ -94,8 +94,11 @@ public class MainActivity extends AppCompatActivity
             String message = "Grids So Many";
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.weekly_rt_page) {
+            Intent intent = new Intent(this, WeeklyRtActivity.class);
+            String message = "7 days";
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

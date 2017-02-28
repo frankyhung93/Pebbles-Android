@@ -12,29 +12,52 @@ import android.util.Log;
 public class PebbleSQLHelper extends SQLiteOpenHelper{
     private static PebbleSQLHelper sInstance;
 
-    public static final String TABLE_NAME = "pebbles_tdl";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_DATE = "td_date";
-    public static final String COLUMN_TIME = "td_time";
-    public static final String COLUMN_DESC = "td_desc";
-    public static final String COLUMN_LUPDATE_TIME = "td_lupdate_time";
+    public static final String TABLE_NAME_TDL = "pebbles_tdl";
+    public static final String COLUMN_ID_TDL = "_id";
+    public static final String COLUMN_DATE_TDL = "td_date";
+    public static final String COLUMN_TIME_TDL = "td_time";
+    public static final String COLUMN_DESC_TDL = "td_desc";
+    public static final String COLUMN_LUPDATE_TIME_TDL = "td_lupdate_time";
+
+    public static final String TABLE_NAME_ROUTINES = "pebbles_routines";
+    public static final String COLUMN_ID_ROUTINES = "_id";
+    public static final String COLUMN_ICON_ID_ROUTINES = "icon_id";
+    public static final String COLUMN_ICON_NAME_ROUTINES = "icon_name";
+    public static final String COLUMN_ICON_BG_COLOR_ROUTINES = "bg_color";
+    public static final String COLUMN_ICON_TX_COLOR_ROUTINES = "tx_color";
+    public static final String COLUMN_LUPDATE_TIME_ROUTINES = "icon_lupdate_time";
 
     private static final String DATABASE_NAME = "pebblesv2.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_CREATE = "CREATE TABLE " +
-                                                        TABLE_NAME +
-                                                        "( " +
-                                                        COLUMN_ID +
-                                                        " integer primary key autoincrement, " +
-                                                        COLUMN_DATE +
-                                                        " text not null, " +
-                                                        COLUMN_TIME +
-                                                        " text not null, " +
-                                                        COLUMN_DESC +
-                                                        " text not null, " +
-                                                        COLUMN_LUPDATE_TIME +
-                                                        " integer not null);";
+    private static final String DATABASE_CREATE_1 = "CREATE TABLE " +
+                                                        TABLE_NAME_TDL +
+                                                                "( " +
+                                                        COLUMN_ID_TDL +
+                                                                " integer primary key autoincrement, " +
+                                                        COLUMN_DATE_TDL +
+                                                                " text not null, " +
+                                                        COLUMN_TIME_TDL +
+                                                                " text not null, " +
+                                                        COLUMN_DESC_TDL +
+                                                                " text not null, " +
+                                                        COLUMN_LUPDATE_TIME_TDL +
+                                                                " integer not null)";
+    private static final String DATABASE_CREATE_2 = "CREATE TABLE " +
+                                                        TABLE_NAME_ROUTINES +
+                                                                "( " +
+                                                        COLUMN_ID_ROUTINES +
+                                                                " integer primary key autoincrement, " +
+                                                        COLUMN_ICON_ID_ROUTINES +
+                                                                " integer not null, " +
+                                                        COLUMN_ICON_NAME_ROUTINES +
+                                                                " text not null, " +
+                                                        COLUMN_ICON_BG_COLOR_ROUTINES +
+                                                                " integer not null, " +
+                                                        COLUMN_ICON_TX_COLOR_ROUTINES +
+                                                                " integer not null, " +
+                                                        COLUMN_LUPDATE_TIME_ROUTINES +
+                                                                " integer not null)";
 
     public static synchronized PebbleSQLHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
@@ -52,7 +75,8 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(DATABASE_CREATE);
+        database.execSQL(DATABASE_CREATE_1);
+        database.execSQL(DATABASE_CREATE_2);
     }
 
     @Override
@@ -60,7 +84,8 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
         Log.w(PebbleSQLHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TDL);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_ROUTINES);
         onCreate(db);
     }
 }

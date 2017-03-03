@@ -27,6 +27,16 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
     public static final String COLUMN_ICON_TX_COLOR_ROUTINES = "tx_color";
     public static final String COLUMN_LUPDATE_TIME_ROUTINES = "icon_lupdate_time";
 
+    public static final String TABLE_NAME_RTSTATISTICS = "pebbles_stats";
+    public static final String COLUMN_ID_STATS = "_id";
+    public static final String COLUMN_DATE_STATS = "stat_date";
+    public static final String COLUMN_DONE_ROUTINES = "stat_done_rts";
+    public static final String COLUMN_DONE_NUMBER = "stat_done_num";
+    public static final String COLUMN_MAX_NUMBER = "stat_max_num";
+    public static final String COLUMN_LUPDATE_STATS = "stat_lupdate_time";
+
+
+
     private static final String DATABASE_NAME = "pebblesv2.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -58,6 +68,21 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
                                                                 " integer not null, " +
                                                         COLUMN_LUPDATE_TIME_ROUTINES +
                                                                 " integer not null)";
+    private static final String DATABASE_CREATE_3 = "CREATE TABLE " +
+                                                        TABLE_NAME_RTSTATISTICS +
+                                                            "( " +
+                                                        COLUMN_ID_STATS +
+                                                            " integer primary key autoincrement, " +
+                                                        COLUMN_DATE_STATS +
+                                                            " text not null, " +
+                                                        COLUMN_DONE_ROUTINES +
+                                                            " text not null, " +
+                                                        COLUMN_DONE_NUMBER +
+                                                            " integer not null, " +
+                                                        COLUMN_MAX_NUMBER +
+                                                            " integer not null, " +
+                                                        COLUMN_LUPDATE_STATS +
+                                                            " integer not null)";
 
     public static synchronized PebbleSQLHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
@@ -77,6 +102,7 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE_1);
         database.execSQL(DATABASE_CREATE_2);
+        database.execSQL(DATABASE_CREATE_3);
     }
 
     @Override
@@ -84,8 +110,10 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
         Log.w(PebbleSQLHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TDL);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_ROUTINES);
-        onCreate(db);
+        // I DO NOT WANT THE DATA DELETED
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TDL);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_ROUTINES);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_RTSTATISTICS);
+//        onCreate(db);
     }
 }

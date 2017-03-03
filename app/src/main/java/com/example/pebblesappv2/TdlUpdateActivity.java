@@ -75,7 +75,7 @@ public class TdlUpdateActivity extends AppCompatActivity {
                     /*      Your code   to get date and time    */
                         selectedmonth = selectedmonth + 1;
                         DecimalFormat mFormat = new DecimalFormat("00");
-                        dateView.setText("" + selectedyear + "-" + mFormat.format(selectedmonth) + "-" + selectedday);
+                        dateView.setText("" + selectedyear + "-" + mFormat.format(selectedmonth) + "-" + mFormat.format(selectedday));
                         timeView.requestFocus();
                     }
                 }, mYear, mMonth, mDay);

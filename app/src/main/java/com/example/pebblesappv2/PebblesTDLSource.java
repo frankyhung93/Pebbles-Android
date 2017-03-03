@@ -133,6 +133,19 @@ public class PebblesTDLSource {
         return init_data;
     }
 
+    public ArrayList<RoutineItem> getRoutinesByIdList(String idList) {
+        ArrayList<RoutineItem> init_data = new ArrayList<RoutineItem>();
+        Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, "_id IN ("+idList+")", null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            RoutineItem rtItem = cursorToRoutineItem(cursor);
+            init_data.add(rtItem);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return init_data;
+    }
+
     private RoutineItem cursorToRoutineItem(Cursor cursor) {
         RoutineItem rtItem = new RoutineItem(cursor.getLong(0), cursor.getLong(1), cursor.getString(2), cursor.getLong(3), cursor.getLong(4));
         return rtItem;

@@ -73,7 +73,7 @@ public class WeeklyRtActivity extends AppCompatActivity{
                         for (Integer i = 0; i < getIdList.size(); i++) {
                             idList_str += getIdList.get(i)+",";
                         }
-                        if (getIdList.size()>1) {
+                        if (getIdList.size()>=1) {
                             idList_str = idList_str.substring(0, idList_str.lastIndexOf(','));
                         }
                         Log.d("DEBUG-FREAK", currentEditingDay+" - "+idList_str);

@@ -39,6 +39,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Test Reset code
+//        SharedPreferences wkdayPref = this.getSharedPreferences(this.getString(R.string.WeekPreferenceKey), Context.MODE_PRIVATE);
+//        SharedPreferences.Editor prefEditor = wkdayPref.edit();
+//        prefEditor.putString("Saturday", "");
+//        prefEditor.commit();
+        //
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

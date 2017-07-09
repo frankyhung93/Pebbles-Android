@@ -1,9 +1,7 @@
 package com.example.pebblesappv2;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,44 +9,38 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
-/**
- * Created by ChunFaiHung on 2017/2/26.
- */
-
-public class WklyDialogGridAdapter extends BaseAdapter {
+class WklyDialogGridAdapter extends BaseAdapter {
     private Context mContext;
-    private PebblesTDLSource rt_source;
     private ArrayList<RoutineItem> rt_data;
     private ArrayList<Integer> recordIdList;
 
-    public WklyDialogGridAdapter(Context c) {
-        rt_source = new PebblesTDLSource(c);
+    WklyDialogGridAdapter(Context c) {
+        PebblesTDLSource rt_source = new PebblesTDLSource(c);
         rt_source.open();
         rt_data = rt_source.getRoutines();
         mContext = c;
-        recordIdList = new ArrayList<Integer>();
+        recordIdList = new ArrayList<>();
     }
 
-    public void setRecordIdList(ArrayList<Integer> newIdList) {
+    void setRecordIdList(ArrayList<Integer> newIdList) {
         this.recordIdList = newIdList;
     }
 
-    public boolean inRecordIdList(Integer testId) {
+    boolean inRecordIdList(Integer testId) {
         return this.recordIdList.contains(testId);
     }
 
-    public void addInRecordIdList(Integer addId) {
+    void addInRecordIdList(Integer addId) {
         this.recordIdList.add(addId);
     }
 
-    public void remInRecordIdList(Integer remId) {
+    void remInRecordIdList(Integer remId) {
         this.recordIdList.remove(this.recordIdList.indexOf(remId));
     }
 
-    public ArrayList<Integer> getRecordIdList() {
+    ArrayList<Integer> getRecordIdList() {
         return this.recordIdList;
     }
 
@@ -86,11 +78,7 @@ public class WklyDialogGridAdapter extends BaseAdapter {
             GradientDrawable border = new GradientDrawable();
             border.setColor((int)rt_data.get(position).getRtBgColor()); // Original BG color
             border.setStroke(10, 0xFF000000); //black border with full opacity
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                routine_wrapView.setBackgroundDrawable(border);
-            } else {
-                routine_wrapView.setBackground(border);
-            }
+            routine_wrapView.setBackground(border);
         } else {
             Log.d("DEBUG", "getting-rt_data within getView: " + rt_data.get(position).getRtId());
             routine_wrapView.setBackgroundColor((int) rt_data.get(position).getRtBgColor());

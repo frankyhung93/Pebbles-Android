@@ -8,11 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
-/**
- * Created by ChunFaiHung on 2017/2/12.
- */
-
-public class PebblesTDLSource {
+class PebblesTDLSource {
     private SQLiteDatabase database;
     private PebbleSQLHelper dbHelper;
     private String[] allColumns_tdl = { PebbleSQLHelper.COLUMN_ID_TDL,
@@ -29,7 +25,7 @@ public class PebblesTDLSource {
             PebbleSQLHelper.COLUMN_LUPDATE_TIME_ROUTINES
     };
 
-    public PebblesTDLSource(Context context) {
+    PebblesTDLSource(Context context) {
         dbHelper = PebbleSQLHelper.getInstance(context);
     }
 
@@ -37,11 +33,11 @@ public class PebblesTDLSource {
         database = dbHelper.getWritableDatabase();
     }
 
-    public void close() {
+    void close() {
         dbHelper.close();
     }
 
-    public ToDoItem CreateTDItem(String desc, String time, String date) {
+    ToDoItem CreateTDItem(String desc, String time, String date) {
         long milis = System.currentTimeMillis();
         ContentValues values = new ContentValues();
         values.put(PebbleSQLHelper.COLUMN_DATE_TDL, date);
@@ -56,7 +52,7 @@ public class PebblesTDLSource {
         return toDoItem;
     }
 
-    public ToDoItem UpdateTDItem(String desc, String time, String date, long org_id) {
+    ToDoItem UpdateTDItem(String desc, String time, String date, long org_id) {
         long milis = System.currentTimeMillis();
         ContentValues values = new ContentValues();
         values.put(PebbleSQLHelper.COLUMN_DATE_TDL, date);
@@ -71,12 +67,12 @@ public class PebblesTDLSource {
         return toDoItem;
     }
 
-    public void DeleteTDItem(long td_id) {
+    void DeleteTDItem(long td_id) {
         database.delete(PebbleSQLHelper.TABLE_NAME_TDL, PebbleSQLHelper.COLUMN_ID_TDL + " = " + td_id, null);
     }
 
-    public ArrayList<ToDoItem> getTDL() {
-        ArrayList<ToDoItem> init_data = new ArrayList<ToDoItem>();
+    ArrayList<ToDoItem> getTDL() {
+        ArrayList<ToDoItem> init_data = new ArrayList<>();
         Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_TDL, allColumns_tdl, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -89,15 +85,14 @@ public class PebblesTDLSource {
     }
 
     private ToDoItem cursorToTDItem(Cursor cursor) {
-        ToDoItem tdItem = new ToDoItem(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-        return tdItem;
+        return new ToDoItem(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
     }
 
     //////////////////////////////
     // Methods for RoutineItems //
     //////////////////////////////
 
-    public RoutineItem CreateRoutineItem(long rt_icon_id, String rt_icon_name, long rt_bg_color, long rt_tx_color) {
+    RoutineItem CreateRoutineItem(long rt_icon_id, String rt_icon_name, long rt_bg_color, long rt_tx_color) {
         if (rt_icon_id == -1 || rt_bg_color == -1 || rt_tx_color == -1) {
             return null;
         }
@@ -116,12 +111,12 @@ public class PebblesTDLSource {
         return rtItem;
     }
 
-    public void DeleteRoutineItem(long rt_id) {
+    void DeleteRoutineItem(long rt_id) {
         database.delete(PebbleSQLHelper.TABLE_NAME_ROUTINES, PebbleSQLHelper.COLUMN_ID_ROUTINES + " = " + rt_id, null);
     }
 
-    public ArrayList<RoutineItem> getRoutines() {
-        ArrayList<RoutineItem> init_data = new ArrayList<RoutineItem>();
+    ArrayList<RoutineItem> getRoutines() {
+        ArrayList<RoutineItem> init_data = new ArrayList<>();
         Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -133,8 +128,8 @@ public class PebblesTDLSource {
         return init_data;
     }
 
-    public ArrayList<RoutineItem> getRoutinesByIdList(String idList) {
-        ArrayList<RoutineItem> init_data = new ArrayList<RoutineItem>();
+    ArrayList<RoutineItem> getRoutinesByIdList(String idList) {
+        ArrayList<RoutineItem> init_data = new ArrayList<>();
         Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, "_id IN ("+idList+")", null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -147,11 +142,10 @@ public class PebblesTDLSource {
     }
 
     private RoutineItem cursorToRoutineItem(Cursor cursor) {
-        RoutineItem rtItem = new RoutineItem(cursor.getLong(0), cursor.getLong(1), cursor.getString(2), cursor.getLong(3), cursor.getLong(4));
-        return rtItem;
+        return new RoutineItem(cursor.getLong(0), cursor.getLong(1), cursor.getString(2), cursor.getLong(3), cursor.getLong(4));
     }
 
-    public Integer getResIdFromRoutineId(Integer recordId) {
+    Integer getResIdFromRoutineId(Integer recordId) {
         Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, PebbleSQLHelper.COLUMN_ID_ROUTINES + " = " + recordId, null, null, null, null);
         cursor.moveToFirst();
         RoutineItem rtItem = cursorToRoutineItem(cursor);

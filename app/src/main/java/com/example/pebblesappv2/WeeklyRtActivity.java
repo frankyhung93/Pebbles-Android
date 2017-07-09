@@ -3,10 +3,8 @@ package com.example.pebblesappv2;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,24 +15,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
 import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Created by ChunFaiHung on 2017/2/26.
- */
 
 public class WeeklyRtActivity extends AppCompatActivity{
     public final String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-    private LinearLayout wkly_dialog_ll;
-    private GridView wkly_dialog_gridv;
     private WklyDialogGridAdapter wklyDialogGridAdapter;
     private String currentEditingDay = "";
 
+    @SuppressWarnings("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +45,8 @@ public class WeeklyRtActivity extends AppCompatActivity{
         final ArrayAdapter<String> weekListAdapter = new WeeklyRtAdapter(this, daysOfWeek);
         weekList.setAdapter(weekListAdapter);
 
-        wkly_dialog_ll = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.wkly_dialog_routines_grid, null);
-        wkly_dialog_gridv = (GridView) wkly_dialog_ll.findViewById(R.id.wkly_routine_dialog_gridview);
+        LinearLayout wkly_dialog_ll = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.wkly_dialog_routines_grid, null);
+        GridView wkly_dialog_gridv = (GridView) wkly_dialog_ll.findViewById(R.id.wkly_routine_dialog_gridview);
         wklyDialogGridAdapter = new WklyDialogGridAdapter(WeeklyRtActivity.this);
         wkly_dialog_gridv.setAdapter(wklyDialogGridAdapter);
         // Set the Routine Grid Dialog up
@@ -78,7 +68,7 @@ public class WeeklyRtActivity extends AppCompatActivity{
                         }
                         Log.d("DEBUG-FREAK", currentEditingDay+" - "+idList_str);
                         prefEditor.putString(currentEditingDay, idList_str);
-                        prefEditor.commit();
+                        prefEditor.apply();
                         weekListAdapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
@@ -108,11 +98,7 @@ public class WeeklyRtActivity extends AppCompatActivity{
                     GradientDrawable border = new GradientDrawable();
                     border.setColor(itemBgColor); // Original BG color
                     border.setStroke(10, 0xFF000000); //black border with full opacity
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                        view.setBackgroundDrawable(border);
-                    } else {
-                        view.setBackground(border);
-                    }
+                    view.setBackground(border);
                     wklyDialogGridAdapter.addInRecordIdList(clickedItemId);
                 }
             }
@@ -135,11 +121,11 @@ public class WeeklyRtActivity extends AppCompatActivity{
                 // Fetch data - iconId from SharedPreferences for each day
                 SharedPreferences wkdayPref = WeeklyRtActivity.this.getSharedPreferences(WeeklyRtActivity.this.getString(R.string.WeekPreferenceKey), Context.MODE_PRIVATE);
                 String iconIdList = wkdayPref.getString(daysOfWeek[i], "nil");
-                ArrayList<Integer> listToPass = new ArrayList<Integer>();
-                if (iconIdList != "nil" && iconIdList != "") {
+                ArrayList<Integer> listToPass = new ArrayList<>();
+                if (!iconIdList.equals("nil") && !iconIdList.equals("")) {
                     String[] iconStrIdList = iconIdList.split(",");
-                    for (int strlistCounter = 0; strlistCounter < iconStrIdList.length; strlistCounter++) {
-                        listToPass.add(Integer.parseInt(iconStrIdList[strlistCounter]));
+                    for (String value: iconStrIdList) {
+                        listToPass.add(Integer.parseInt(value));
                     }
                 }
 

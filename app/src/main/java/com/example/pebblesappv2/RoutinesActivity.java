@@ -16,12 +16,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-/**
- * Created by ChunFaiHung on 2017/2/22.
- */
-
 public class RoutinesActivity extends AppCompatActivity {
-    public ArrayList<RoutineItem> routine_data = new ArrayList<RoutineItem>();
+    public ArrayList<RoutineItem> routine_data = new ArrayList<>();
     public PebblesTDLSource rt_source;
     public RoutinesGridAdapter rt_adapter;
 

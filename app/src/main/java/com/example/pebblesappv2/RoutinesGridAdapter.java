@@ -1,28 +1,22 @@
 package com.example.pebblesappv2;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by ChunFaiHung on 2017/2/23.
- */
-
-public class RoutinesGridAdapter extends ArrayAdapter<RoutineItem> {
+class RoutinesGridAdapter extends ArrayAdapter<RoutineItem> {
     private Context mContext;
-    private ArrayList<RoutineItem> rt_data = new ArrayList<RoutineItem>();
+    private ArrayList<RoutineItem> rt_data = new ArrayList<>();
 
-    public RoutinesGridAdapter(Context c, ArrayList<RoutineItem> rt_data) {
+    RoutinesGridAdapter(Context c, ArrayList<RoutineItem> rt_data) {
         super(c, 0, rt_data);
         this.mContext = c;
         this.rt_data = rt_data;
@@ -46,8 +40,9 @@ public class RoutinesGridAdapter extends ArrayAdapter<RoutineItem> {
     }
 
     // create a new ImageView for each item referenced by the Adapter
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         Log.d("DEBUG","HEYO");
         View itemGrid;
         RoutineItem this_rt_item;

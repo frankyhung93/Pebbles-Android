@@ -11,25 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
-/**
- * Created by ChunFaiHung on 2017/2/13.
- */
-
 public class TdlUpdateActivity extends AppCompatActivity {
-
-    private String org_date;
-    private String org_time;
-    private String org_desc;
-//    private String org_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +29,9 @@ public class TdlUpdateActivity extends AppCompatActivity {
 
         // Get passed values from TdlActivity
         Intent updateI = getIntent();
-        org_date = updateI.getStringExtra("Org_Date");
-        org_time = updateI.getStringExtra("Org_Time");
-        org_desc = updateI.getStringExtra("Org_Desc");
+        String org_date = updateI.getStringExtra("Org_Date");
+        String org_time = updateI.getStringExtra("Org_Time");
+        String org_desc = updateI.getStringExtra("Org_Desc");
 //        org_id = updateI.getStringExtra("Org_Id");
 
         // Declaration of vars for both textviews for the pickers

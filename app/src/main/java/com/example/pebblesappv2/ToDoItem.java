@@ -5,17 +5,13 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by ChunFaiHung on 2017/2/12.
- */
-
-public class ToDoItem {
+class ToDoItem {
     private long id;
     private String todoDesc;
     private String todoTime;
     private String todoDate;
 
-    public ToDoItem(long id, String todoDesc, String todoTime, String todoDate) {
+    ToDoItem(long id, String todoDesc, String todoTime, String todoDate) {
         this.id = id;
         this.todoDesc = todoDesc;
         this.todoTime = todoTime;
@@ -31,13 +27,13 @@ public class ToDoItem {
 
     // GETTERS
     public long getId() { return this.id; }
-    public String getToDoDesc() {
+    String getToDoDesc() {
         return this.todoDesc;
     }
-    public String getToDoTime() {
+    String getToDoTime() {
         return this.todoTime;
     }
-    public String getToDoDate() {
+    String getToDoDate() {
         return this.todoDate;
     }
 
@@ -51,14 +47,14 @@ public class ToDoItem {
     }
     public void setToDoDate(String setDate) { this.todoDate = setDate; }
 
-    public Date getDateFromString() {
+    Date getDateFromString() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date returnDate;
         try {
             returnDate = sdf.parse(this.todoDate);
             return returnDate;
         } catch (Exception e) {
-            Log.d("ParseException", e.getMessage().toString());
+            Log.d("ParseException", e.getMessage());
             return null;
         }
     }

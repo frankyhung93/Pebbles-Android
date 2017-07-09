@@ -1,21 +1,14 @@
 package com.example.pebblesappv2;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.adapters.ArraySwipeAdapter;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,26 +18,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-/**
- * Created by ChunFaiHung on 2017/2/12.
- */
-
-public class TdlArrayAdapter extends BaseSwipeAdapter {
+class TdlArrayAdapter extends BaseSwipeAdapter {
 
     private final Context context;
-    private ArrayList<ToDoItem> tdl_data = new ArrayList<ToDoItem>();
-    public PebblesTDLSource tdl_source;
-    public String[] dayOfWeekArr = {"Null","Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"};
+    private ArrayList<ToDoItem> tdl_data = new ArrayList<>();
+    private PebblesTDLSource tdl_source;
+    private String[] dayOfWeekArr = {"Null","Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"};
 
     // TUTORIAL / GUIDE:
     // The three parameters for the custom array adapter must be present
     // So as to provide a complete set of parameters for the super constructor
     // No warnings/errors will occur if you for example do this: super(context);
-    public TdlArrayAdapter(Context context, ArrayList<ToDoItem> tdl_data) {
+    TdlArrayAdapter(Context context, ArrayList<ToDoItem> tdl_data) {
         this.context = context;
         this.tdl_data = tdl_data;
     }
 
+    @SuppressWarnings("InflateParams")
     @Override
     public View generateView(int position, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.inflate_td_swipe_layout, null);

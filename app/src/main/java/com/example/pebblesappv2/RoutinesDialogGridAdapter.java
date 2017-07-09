@@ -1,25 +1,13 @@
 package com.example.pebblesappv2;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.lang.reflect.Field;
-
-
-/**
- * Created by ChunFaiHung on 2017/2/23.
- */
-
-public class RoutinesDialogGridAdapter extends BaseAdapter {
+class RoutinesDialogGridAdapter extends BaseAdapter {
     private Context mContext;
     private Integer[] mIcons = {
             R.drawable.acoustic_guitar, R.drawable.analytics, R.drawable.beach, R.drawable.beach_1,
@@ -41,7 +29,7 @@ public class RoutinesDialogGridAdapter extends BaseAdapter {
             R.drawable.write, R.drawable.writing_1
     };
 
-    public RoutinesDialogGridAdapter(Context c) {
+    RoutinesDialogGridAdapter(Context c) {
         mContext = c;
     }
 

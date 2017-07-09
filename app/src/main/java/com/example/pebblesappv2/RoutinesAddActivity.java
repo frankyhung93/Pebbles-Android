@@ -13,30 +13,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-/**
- * Created by ChunFaiHung on 2017/2/23.
- */
-
 public class RoutinesAddActivity extends AppCompatActivity {
     private ImageButton add_routine_icon_butt;
     private ImageView add_routine_color_butt;
     private ImageView add_routine_txcolor_butt;
-    private TextView add_routine_icon_name;
     private int currentBackgroundColor = 0xffffffff;
     private Integer chosen_icon_id;
 
-
+    @SuppressWarnings("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +149,7 @@ public class RoutinesAddActivity extends AppCompatActivity {
     }
 
     public void sendResult() {
-        add_routine_icon_name = (TextView) findViewById(R.id.add_routine_name_input);
+        TextView add_routine_icon_name = (TextView) findViewById(R.id.add_routine_name_input);
         add_routine_color_butt = (ImageView) findViewById(R.id.add_routine_color_button);
         add_routine_txcolor_butt = (ImageView) findViewById(R.id.add_routine_txcolor_button);
         ColorDrawable color_bg = (ColorDrawable) add_routine_color_butt.getBackground();

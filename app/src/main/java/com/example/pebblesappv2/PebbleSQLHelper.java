@@ -5,35 +5,31 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-/**
- * Created by ChunFaiHung on 2017/2/12.
- */
-
-public class PebbleSQLHelper extends SQLiteOpenHelper{
+class PebbleSQLHelper extends SQLiteOpenHelper{
     private static PebbleSQLHelper sInstance;
 
-    public static final String TABLE_NAME_TDL = "pebbles_tdl";
-    public static final String COLUMN_ID_TDL = "_id";
-    public static final String COLUMN_DATE_TDL = "td_date";
-    public static final String COLUMN_TIME_TDL = "td_time";
-    public static final String COLUMN_DESC_TDL = "td_desc";
-    public static final String COLUMN_LUPDATE_TIME_TDL = "td_lupdate_time";
+    static final String TABLE_NAME_TDL = "pebbles_tdl";
+    static final String COLUMN_ID_TDL = "_id";
+    static final String COLUMN_DATE_TDL = "td_date";
+    static final String COLUMN_TIME_TDL = "td_time";
+    static final String COLUMN_DESC_TDL = "td_desc";
+    static final String COLUMN_LUPDATE_TIME_TDL = "td_lupdate_time";
 
-    public static final String TABLE_NAME_ROUTINES = "pebbles_routines";
-    public static final String COLUMN_ID_ROUTINES = "_id";
-    public static final String COLUMN_ICON_ID_ROUTINES = "icon_id";
-    public static final String COLUMN_ICON_NAME_ROUTINES = "icon_name";
-    public static final String COLUMN_ICON_BG_COLOR_ROUTINES = "bg_color";
-    public static final String COLUMN_ICON_TX_COLOR_ROUTINES = "tx_color";
-    public static final String COLUMN_LUPDATE_TIME_ROUTINES = "icon_lupdate_time";
+    static final String TABLE_NAME_ROUTINES = "pebbles_routines";
+    static final String COLUMN_ID_ROUTINES = "_id";
+    static final String COLUMN_ICON_ID_ROUTINES = "icon_id";
+    static final String COLUMN_ICON_NAME_ROUTINES = "icon_name";
+    static final String COLUMN_ICON_BG_COLOR_ROUTINES = "bg_color";
+    static final String COLUMN_ICON_TX_COLOR_ROUTINES = "tx_color";
+    static final String COLUMN_LUPDATE_TIME_ROUTINES = "icon_lupdate_time";
 
-    public static final String TABLE_NAME_RTSTATISTICS = "pebbles_stats";
-    public static final String COLUMN_ID_STATS = "_id";
-    public static final String COLUMN_DATE_STATS = "stat_date";
-    public static final String COLUMN_DONE_ROUTINES = "stat_done_rts";
-    public static final String COLUMN_DONE_NUMBER = "stat_done_num";
-    public static final String COLUMN_MAX_NUMBER = "stat_max_num";
-    public static final String COLUMN_LUPDATE_STATS = "stat_lupdate_time";
+    private static final String TABLE_NAME_RTSTATISTICS = "pebbles_stats";
+    private static final String COLUMN_ID_STATS = "_id";
+    private static final String COLUMN_DATE_STATS = "stat_date";
+    private static final String COLUMN_DONE_ROUTINES = "stat_done_rts";
+    private static final String COLUMN_DONE_NUMBER = "stat_done_num";
+    private static final String COLUMN_MAX_NUMBER = "stat_max_num";
+    private static final String COLUMN_LUPDATE_STATS = "stat_lupdate_time";
 
 
 
@@ -84,7 +80,7 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
                                                         COLUMN_LUPDATE_STATS +
                                                             " integer not null)";
 
-    public static synchronized PebbleSQLHelper getInstance(Context context) {
+    static synchronized PebbleSQLHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
@@ -99,7 +95,7 @@ public class PebbleSQLHelper extends SQLiteOpenHelper{
     }
 
     @Override
-    public void onCreate(SQLiteDatabase database) {
+   public void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE_1);
         database.execSQL(DATABASE_CREATE_2);
         database.execSQL(DATABASE_CREATE_3);

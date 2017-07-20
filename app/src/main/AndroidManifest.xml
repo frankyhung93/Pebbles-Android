@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.pebblesappv2">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/pebbles"
@@ -20,41 +23,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.pebblesappv2.TdlActivity"
+            android:parentActivityName=".MainActivity"
+            android:name=".TdlActivity"
             android:label="To Do List"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name="com.example.pebblesappv2.TdlAddNewActivity"
+            android:parentActivityName=".TdlActivity"
+            android:name=".TdlAddNewActivity"
             android:label="Add To-Do-Item"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name="com.example.pebblesappv2.TdlUpdateActivity"
+            android:parentActivityName=".TdlActivity"
+            android:name=".TdlUpdateActivity"
             android:label="Update To-Do-Item"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name="com.example.pebblesappv2.RoutinesActivity"
+            android:parentActivityName=".MainActivity"
+            android:name=".RoutinesActivity"
             android:label="All Routines"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name="com.example.pebblesappv2.RoutinesAddActivity"
+            android:parentActivityName=".RoutinesActivity"
+            android:name=".RoutinesAddActivity"
             android:label="Add a Routine"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name="com.example.pebblesappv2.WeeklyRtActivity"
+            android:parentActivityName=".MainActivity"
+            android:name=".WeeklyRtActivity"
             android:label="Weekly Routines"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".TestServer"
+            android:label="Test VM Server"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

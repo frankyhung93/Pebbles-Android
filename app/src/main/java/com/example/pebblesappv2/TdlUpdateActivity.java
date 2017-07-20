@@ -24,8 +24,9 @@ public class TdlUpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_td);
         // Setting toolbar interface
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tdl_update_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.general_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Get passed values from TdlActivity
         Intent updateI = getIntent();

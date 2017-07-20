@@ -23,9 +23,11 @@ public class TdlAddNewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_td);
+
         // Setting toolbar interface
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tdl_adn_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.general_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Setting nav drawer interface
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.tdl_adn_drawer_layout);
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

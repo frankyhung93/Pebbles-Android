@@ -25,9 +25,11 @@ public class RoutinesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routines);
+
         // Setting toolbar interface
-        Toolbar toolbar = (Toolbar) findViewById(R.id.routines_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.general_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Fetch grid data
         routine_data.clear();

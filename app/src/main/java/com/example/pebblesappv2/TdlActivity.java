@@ -27,8 +27,9 @@ public class TdlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tdl);
         // Setting toolbar interface
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tdl_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.general_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tdl_data.clear();
         // Opening sql connection and helper
@@ -41,7 +42,7 @@ public class TdlActivity extends AppCompatActivity {
         tdl_adapter = new TdlArrayAdapter(this, tdl_data);
 
         ListView tdl_listView = (ListView) findViewById(R.id.tdl_listview);
-        tdl_listView.setEmptyView(findViewById(R.id.empty_view_tdl_text));
+//        tdl_listView.setEmptyView(findViewById(R.id.empty_view_tdl_text));
 
         // Set adapter for the listView
         tdl_listView.setAdapter(tdl_adapter);

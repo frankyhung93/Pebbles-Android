@@ -35,8 +35,9 @@ public class RoutinesAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_routine);
         // Setting toolbar interface
-        Toolbar toolbar = (Toolbar) findViewById(R.id.add_routine_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.general_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Init actions (Dialog building, gridview building and adapter setting)
         GridView dialogGridView = (GridView) LayoutInflater.from(this).inflate(R.layout.dialog_routines_grid, null);

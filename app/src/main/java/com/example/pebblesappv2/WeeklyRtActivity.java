@@ -30,8 +30,9 @@ public class WeeklyRtActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weeklyrt);
         // Setting toolbar interface
-        Toolbar toolbar = (Toolbar) findViewById(R.id.weeklyrt_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.general_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Testing add IconIDs to two separate days
 //        SharedPreferences wkdayPref = this.getSharedPreferences(this.getString(R.string.WeekPreferenceKey), Context.MODE_PRIVATE);

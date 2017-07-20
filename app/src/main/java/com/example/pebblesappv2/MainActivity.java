@@ -1,9 +1,12 @@
 package com.example.pebblesappv2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -96,6 +99,11 @@ public class MainActivity extends AppCompatActivity
         Log.d("DEBUG", "SIZE OF RT_DATA:"+routine_data.size());
     }
 
+    public boolean isNetworkAvailable(Context context) {
+        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
     @Override
     public void onRestart() {
         rt_source = new PebblesTDLSource(this);
@@ -162,8 +170,24 @@ public class MainActivity extends AppCompatActivity
             String message = "7 days";
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.test_server) {
+            if (isNetworkAvailable(this)) {
+                Intent intent = new Intent(this, TestServer.class);
+                String message = "Testing Commence";
+                intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+            } else {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle("No Shit!");
+                alert.setMessage("You need Internet Connection BRO!");
+                alert.setNegativeButton("Fuck Off", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+            }
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

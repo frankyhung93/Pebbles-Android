@@ -43,7 +43,6 @@ class RoutinesGridAdapter extends ArrayAdapter<RoutineItem> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        Log.d("DEBUG","HEYO");
         View itemGrid;
         RoutineItem this_rt_item;
         this_rt_item = rt_data.get(position);
@@ -55,6 +54,7 @@ class RoutinesGridAdapter extends ArrayAdapter<RoutineItem> {
         } else {
             itemGrid = convertView;
         }
+        Log.d("DEBUG","Position: "+position+", iconid: "+this_rt_item.getRtIconId());
         ImageView routine_iconView = (ImageView) itemGrid.findViewById(R.id.routine_icon);
         TextView routine_titleView = (TextView) itemGrid.findViewById(R.id.routine_title);
         View rt_item_wrap = itemGrid.findViewById(R.id.rt_item_wrap);

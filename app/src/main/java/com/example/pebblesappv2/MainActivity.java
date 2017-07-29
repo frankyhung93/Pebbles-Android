@@ -170,9 +170,9 @@ public class MainActivity extends AppCompatActivity
             String message = "7 days";
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
-        } else if (id == R.id.test_server) {
+        } else if (id == R.id.my_music) {
             if (isNetworkAvailable(this)) {
-                Intent intent = new Intent(this, TestServer.class);
+                Intent intent = new Intent(this, MusicDashBoard.class);
                 String message = "Testing Commence";
                 intent.putExtra(EXTRA_MESSAGE, message);
                 startActivity(intent);

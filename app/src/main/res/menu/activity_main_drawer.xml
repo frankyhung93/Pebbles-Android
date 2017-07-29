@@ -15,9 +15,9 @@
             android:icon="@drawable/weekly_calendar"
             android:title="Weekly Routines" />
         <item
-            android:id="@+id/test_server"
-            android:icon="@drawable/compass"
-            android:title="Test Server" />
+            android:id="@+id/my_music"
+            android:icon="@drawable/play_button"
+            android:title="Music Sync" />
     </group>
 
     <item android:title="Communicate">

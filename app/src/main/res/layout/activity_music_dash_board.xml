@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Use a relative layout for the empty textview just under the listview -->
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.pebblesappv2.MusicDashBoard">
+
+    <include layout="@layout/appbar_layout"/>
+
+    <EditText
+        android:id="@+id/textArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contextClickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:hint="whoreson's arse"
+        android:inputType="textMultiLine" />
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -20,10 +20,6 @@ import io.realm.RealmResults;
 public class TestServer extends AppCompatActivity {
     Realm realm;
     Button getJson;
-    Button getLastTag;
-    Button getFirstDl;
-    EditText downloadText;
-    EditText tagText;
     String staticIp = "192.168.1.130";
     String protocol = "http://";
     JSONArray jDlRsArray;
@@ -38,50 +34,18 @@ public class TestServer extends AppCompatActivity {
         Realm.init(this);
         realm = Realm.getDefaultInstance();
 
-        // Find Ids
-        downloadText = (EditText) findViewById(R.id.downloadText);
-        tagText = (EditText) findViewById(R.id.tagText);
+//        getJson = (Button) findViewById(R.id.getJson);
+//        getJson.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                jDlRsArray = getJsonResult("dbsqlite_return_downloads");
+//                jTagRsArray = getJsonResult("dbsqlite_return_tags");
+//
+//                createModel_downloads(jDlRsArray);
+//                createModel_tags(jTagRsArray);
+//            }
+//        });
 
-        getJson = (Button) findViewById(R.id.getJson);
-        getJson.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jDlRsArray = getJsonResult("dbsqlite_return_downloads");
-                jTagRsArray = getJsonResult("dbsqlite_return_tags");
-
-                createModel_downloads(jDlRsArray);
-                createModel_tags(jTagRsArray);
-            }
-        });
-
-        getLastTag = (Button) findViewById(R.id.getLastTag);
-        getLastTag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Build the query looking at all users:
-                RealmQuery<YTTags> query = realm.where(YTTags.class);
-
-                // Execute the query:
-                RealmResults<YTTags> resultAll = query.findAll();
-
-                int tagSize = resultAll.size();
-                tagText.setText(resultAll.get(tagSize-1).getTag_name());
-            }
-        });
-
-        getFirstDl = (Button) findViewById(R.id.getFirstDownload);
-        getFirstDl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Build the query looking at all users:
-                RealmQuery<YTDownloads> query = realm.where(YTDownloads.class);
-
-                // Execute the query:
-                RealmResults<YTDownloads> resultAll = query.findAll();
-
-                downloadText.setText(resultAll.get(0).getVideo_title());
-            }
-        });
     }
 
     public void createModel_downloads(JSONArray jsonArray) {

@@ -263,13 +263,9 @@ public class MusicSyncActivity extends BaseACA {
                     input = connection.getInputStream();
                     File f = new File(Environment.getExternalStorageDirectory(), folder_name);
                     if (!f.exists()) {
-                        if (f.mkdirs()) {
-//                            output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
-                        } else {
+                        if (!f.mkdirs()) {
                             Log.d("MKDIR FAILURE", f.toString());
                         }
-                    } else {
-//                        output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
                     }
                     Log.d("FILE PATH:", Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
 

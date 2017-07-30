@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseACA
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public final static String EXTRA_MESSAGE = "msg_one";

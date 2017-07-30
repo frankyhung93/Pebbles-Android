@@ -17,7 +17,7 @@ import android.widget.TimePicker;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
-public class TdlUpdateActivity extends AppCompatActivity {
+public class TdlUpdateActivity extends BaseACA {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

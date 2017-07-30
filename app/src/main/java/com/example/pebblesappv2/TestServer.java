@@ -17,7 +17,7 @@ import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-public class TestServer extends AppCompatActivity {
+public class TestServer extends BaseACA {
     Realm realm;
     Button getJson;
     String staticIp = "192.168.1.130";

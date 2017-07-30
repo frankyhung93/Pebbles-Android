@@ -22,7 +22,7 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
-public class RoutinesAddActivity extends AppCompatActivity {
+public class RoutinesAddActivity extends BaseACA {
     private ImageButton add_routine_icon_butt;
     private ImageView add_routine_color_butt;
     private ImageView add_routine_txcolor_butt;

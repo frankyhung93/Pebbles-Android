@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class TdlActivity extends AppCompatActivity {
+public class TdlActivity extends BaseACA {
 
 //    final static int GET_RESULT_TEXT = 0;
     public ArrayList<ToDoItem> tdl_data = new ArrayList<ToDoItem>();

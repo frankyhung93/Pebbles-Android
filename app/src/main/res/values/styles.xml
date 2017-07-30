@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -8,9 +8,37 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TransparentActionBar" parent="@android:style/Theme.Holo.Light">
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="android:background">@null</item>
+        <item name="android:actionMenuTextColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="android:colorControlNormal">@color/colorWhite</item>
+        <!-- Support library compatibility -->
+        <item name="background">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.PepApp.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <!-- Parent theme sets colorControlNormal to textColorPrimary. -->
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+        <item name="android:textColorSecondary">@color/colorWhite</item>
+        <item name="actionBarTheme">@style/PepApp.WhiteBackArrowTheme</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="android:colorControlNormal">@color/colorWhite</item>
+    </style>
+
+    <style name="PepApp.WhiteBackArrowTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- THIS is where you can color the arrow! -->
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="android:colorControlNormal">@color/colorWhite</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="android:colorControlNormal">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.FullScreen">

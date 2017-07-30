@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/musicbg_1"
-    tools:context="com.example.pebblesappv2.MusicDashBoard">
+    android:background="@drawable/milky_mount_blur_01"
+    tools:context="com.example.pebblesappv2.AlbumPlayList">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="casual"
-                android:text="@string/music_title"
+                android:text=""
                 android:textSize="24sp" />
 
         </android.support.v7.widget.Toolbar>
@@ -38,14 +38,14 @@
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/music_albumview"
+        android:id="@+id/album_playlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:paddingTop="6dp"
-        tools:context="com.example.pebblesappv2.MusicDashBoard"
+        tools:context="com.example.pebblesappv2.AlbumPlayList"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 

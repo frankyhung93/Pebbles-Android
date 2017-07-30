@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import java.util.ArrayList;
 
-public class WeeklyRtActivity extends AppCompatActivity{
+public class WeeklyRtActivity extends BaseACA{
     public final String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private WklyDialogGridAdapter wklyDialogGridAdapter;
     private String currentEditingDay = "";

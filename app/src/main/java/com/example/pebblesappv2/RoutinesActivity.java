@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class RoutinesActivity extends AppCompatActivity {
+public class RoutinesActivity extends BaseACA {
     public ArrayList<RoutineItem> routine_data = new ArrayList<>();
     public PebblesTDLSource rt_source;
     public RoutinesGridAdapter rt_adapter;

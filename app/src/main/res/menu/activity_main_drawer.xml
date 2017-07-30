@@ -17,7 +17,7 @@
         <item
             android:id="@+id/my_music"
             android:icon="@drawable/play_button"
-            android:title="Music Sync" />
+            android:title="My Music" />
     </group>
 
     <item android:title="Communicate">

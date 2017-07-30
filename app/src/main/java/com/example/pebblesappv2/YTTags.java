@@ -1,11 +1,19 @@
 package com.example.pebblesappv2;
 
 import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.annotations.LinkingObjects;
 
 public class YTTags extends RealmObject {
     private String tag_name;
     private int tag_order;
     private int id;
+    @LinkingObjects("video_tags")
+    private final RealmResults<YTDownloads> songs = null;
+
+    public RealmResults<YTDownloads> getSongs() {
+        return songs;
+    }
 
     public int getId() {
         return id;

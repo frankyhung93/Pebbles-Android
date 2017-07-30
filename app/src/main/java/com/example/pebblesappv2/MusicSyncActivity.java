@@ -1,20 +1,12 @@
 package com.example.pebblesappv2;
 
-import android.app.DownloadManager;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Debug;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,10 +27,8 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-import static android.R.attr.button;
-import static android.R.attr.label;
 
-public class MusicSyncActivity extends AppCompatActivity {
+public class MusicSyncActivity extends BaseACA {
     Realm realm;
     String staticIp = "192.168.1.130";
     String protocol = "http://";
@@ -274,18 +264,19 @@ public class MusicSyncActivity extends AppCompatActivity {
                     File f = new File(Environment.getExternalStorageDirectory(), folder_name);
                     if (!f.exists()) {
                         if (f.mkdirs()) {
-                            output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+//                            output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
                         } else {
                             Log.d("MKDIR FAILURE", f.toString());
                         }
                     } else {
-                        output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+//                        output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
                     }
                     Log.d("FILE PATH:", Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
 
                     // check if the file already exists
                     File file = new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, filename);
                     if (!file.exists()) {
+                        output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
 
                         byte data[] = new byte[4096];
                         long total = 0;
@@ -308,6 +299,8 @@ public class MusicSyncActivity extends AppCompatActivity {
                                 throw e;
                             }
                         }
+                    } else {
+                        Log.d("DOWNLOAD ALREADY EXISTS", filename);
                     }
                 } catch (Exception e) {
                     Log.d("DOWNLOAD EXCEPTION", e.toString());

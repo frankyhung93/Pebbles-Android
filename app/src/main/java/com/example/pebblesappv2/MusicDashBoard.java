@@ -51,7 +51,7 @@ public class MusicDashBoard extends BaseACA {
         // init listview
         mListView = (ListView) findViewById(R.id.music_albumview);
         RealmQuery<YTTags> query = realm.where(YTTags.class);
-        RealmResults<YTTags> albums_rs = query.findAllSorted("tag_name");
+        RealmResults<YTTags> albums_rs = query.findAllSorted("tag_order");
         albums = new ArrayList<>();
         for (YTTags album : albums_rs) {
             albums.add(album);

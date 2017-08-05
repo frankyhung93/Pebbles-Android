@@ -103,7 +103,7 @@ public class AlbumPlayList extends BaseACA {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 YTDownloads song = adapter.getItem(position);
                 String song_id = song.getVideo_id();
-                String song_file = song_id + vid_ext_map.get(song_id);
+                String song_file = song_id + "." + vid_ext_map.get(song_id);
                 if (!isPlaying) {
                     Uri myUri = Uri.parse(new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, song_file).toString()); // initialize Uri here
                     player = new MediaPlayer();
@@ -180,12 +180,4 @@ public class AlbumPlayList extends BaseACA {
         },player.getDuration()+100);
     }
 
-    public String getExtFromFileName(String filename) {
-        String filenameArray[] = filename.split("\\.");
-        return filenameArray[filenameArray.length-1];
-    }
-    public String getNameFromFileName(String filename) {
-        String filenameArray[] = filename.split("\\.");
-        return filenameArray[filenameArray.length-2];
-    }
 }

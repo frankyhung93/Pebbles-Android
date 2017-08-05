@@ -1,6 +1,8 @@
 package com.example.pebblesappv2;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +24,29 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.ResourceId;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.Thumbnail;
+import com.google.api.services.youtube.model.VideoListResponse;
+import com.google.common.io.BaseEncoding;
 
 
 public class MusicSyncActivity extends BaseACA {
@@ -34,16 +55,40 @@ public class MusicSyncActivity extends BaseACA {
     String protocol = "http://";
     JSONArray jDlRsArray;
     JSONArray jTagRsArray;
+    static YouTube youtube;
+    static final String KEY
+            = "AIzaSyA6BiT3OVlEvKqTvHL9slfPqYucIksgQuw";
+    YouTube.Videos.List query;
+    String packageName;
 
     Button button_sync;
     Button button_back;
     TextView label_status;
     Boolean sync_in_progress;
+    String[] videoIds;
+
+    private String getSHA1(String packageName){
+        try {
+            Signature[] signatures = this.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures;
+            for (Signature signature: signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA-1");
+                md.update(signature.toByteArray());
+                return BaseEncoding.base16().encode(md.digest());
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_sync);
+        packageName = getApplicationContext().getPackageName();
 
         // Setup realm
         Realm.init(this);
@@ -63,6 +108,7 @@ public class MusicSyncActivity extends BaseACA {
                     sync_in_progress = true;
                     updateStatusLabel("Populating the realm database with YTTags and YTDownloads");
                     populateData();
+                    setVideoIds();
                     new MusicSyncWorker().execute(getDownloadURLs());
                 }
             }
@@ -77,6 +123,15 @@ public class MusicSyncActivity extends BaseACA {
                 finish();
             }
         });
+    }
+
+    void setVideoIds() {
+        RealmQuery<YTDownloads> query = realm.where(YTDownloads.class);
+        RealmResults<YTDownloads> result1 = query.findAll();
+        videoIds = new String[result1.size()];
+        for (int i = 0; i < result1.size(); i++) {
+            videoIds[i] = result1.get(i).getVideo_id();
+        }
     }
 
     public URL[] getDownloadURLs () {
@@ -239,7 +294,7 @@ public class MusicSyncActivity extends BaseACA {
             String folder_name = "youtube_music";
             int fileLength;
             int download_count = 0;
-            for (URL url : urls) {
+            for (URL url : urls) { // Download the song files from the Ubuntu Server
                 try {
                     String urlString = url.getFile();
                     String filename = urlString.substring( urlString.lastIndexOf('/')+1, urlString.length() );
@@ -298,6 +353,114 @@ public class MusicSyncActivity extends BaseACA {
                     } else {
                         Log.d("DOWNLOAD ALREADY EXISTS", filename);
                     }
+                } catch (Exception e) {
+                    Log.d("DOWNLOAD EXCEPTION", e.toString());
+                    return e.toString();
+                } finally {
+                    try {
+                        if (output != null)
+                            output.close();
+                        if (input != null)
+                            input.close();
+                    } catch (IOException ignored) {
+                        Log.d("IOEXCEPTION IGNORED", "um...");
+                    }
+
+                    if (connection != null)
+                        connection.disconnect();
+                }
+
+            }
+
+            input = null;
+            output = null;
+            connection = null;
+            folder_name = "youtube_thumbnails";
+            // Download the image thumbnails for the song files
+            for (String videoId : videoIds) {
+
+                try {
+                    // This object is used to make YouTube Data API requests. The last
+                    // argument is required, but since we don't need anything
+                    // initialized when the HttpRequest is initialized, we override
+                    // the interface and provide a no-op function.
+                    youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
+                        public void initialize(HttpRequest request) throws IOException {
+                            request.getHeaders().set("X-Android-Package", packageName);
+                            Log.d("PACKAGE-NAME", packageName);
+                            request.getHeaders().set("X-Android-Cert",getSHA1(packageName));
+                        }
+                    }).setApplicationName("pebblesappv2").build();
+
+                    query = youtube.videos().list("snippet");
+                    query.setKey(KEY);
+                    query.setId(videoId);
+
+                    VideoListResponse response = query.execute();
+                    String thumbnailUrl = response.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl();
+                    URL url = new URL(thumbnailUrl);
+
+                    // Start the HttpConnection and download process
+                    String urlString = url.getFile();
+                    String temp = urlString.substring( urlString.lastIndexOf('/')+1, urlString.length() );
+                    String ext = getExtFromFileName(temp);
+                    String filename = videoId + "." + ext;
+
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+
+                    // expect HTTP 200 OK, so we don't mistakenly save error report
+                    // instead of the file
+                    if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        Log.d("HTTP CONNECTION", String.valueOf(connection.getResponseCode()));
+                        return "Server returned HTTP " + connection.getResponseCode()
+                                + " " + connection.getResponseMessage();
+                    }
+
+                    // this will be useful to display download percentage
+                    // might be -1: server did not report the length
+                    fileLength = connection.getContentLength();
+
+                    // download the file
+                    input = connection.getInputStream();
+                    File f = new File(Environment.getExternalStorageDirectory(), folder_name);
+                    if (!f.exists()) {
+                        if (!f.mkdirs()) {
+                            Log.d("MKDIR FAILURE", f.toString());
+                        }
+                    }
+                    Log.d("FILE PATH:", Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+
+                    // check if the file already exists
+                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, filename);
+                    if (!file.exists()) {
+                        output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+
+                        byte data[] = new byte[4096];
+                        long total = 0;
+                        int count;
+                        while ((count = input.read(data)) != -1) {
+                            // allow canceling with back button
+                            if (isCancelled()) {
+                                input.close();
+                                return null;
+                            }
+                            total += count;
+                            // publishing the progress....
+                            if (fileLength > 0) // only if total length is known
+                                publishProgress("Downloading Thumbnail " + filename + ", Progress: " + (int) (total * 100 / fileLength) + "%.");
+                            try {
+                                output.write(data, 0, count);
+                                download_count++;
+                            } catch (Exception e) {
+                                Log.d("DOWNLOAD EXCEPTION", e.toString());
+                                throw e;
+                            }
+                        }
+                    } else {
+                        Log.d("DOWNLOAD ALREADY EXISTS", filename);
+                    }
+
                 } catch (Exception e) {
                     Log.d("DOWNLOAD EXCEPTION", e.toString());
                     return e.toString();

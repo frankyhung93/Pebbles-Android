@@ -12,7 +12,8 @@
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/play_button" />
+        android:background="@color/colorBlack"
+        android:scaleType="centerInside"/>
 
     <TextView
         android:id="@+id/song_title"

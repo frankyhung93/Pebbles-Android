@@ -11,4 +11,13 @@ public class BaseACA extends AppCompatActivity {
     public String getMyString(int resid) {
         return getResources().getString(resid);
     }
+
+    public String getExtFromFileName(String filename) {
+        String filenameArray[] = filename.split("\\.");
+        return filenameArray[filenameArray.length-1];
+    }
+    public String getNameFromFileName(String filename) {
+        String filenameArray[] = filename.split("\\.");
+        return filenameArray[filenameArray.length-2];
+    }
 }

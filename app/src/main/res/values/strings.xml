@@ -9,4 +9,7 @@
     <string name="songs_prefix">Songs: </string>
     <string name="intent_extra_tagId">EXTRA_TAGID</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

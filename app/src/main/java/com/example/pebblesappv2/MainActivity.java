@@ -99,11 +99,6 @@ public class MainActivity extends BaseACA
         Log.d("DEBUG", "SIZE OF RT_DATA:"+routine_data.size());
     }
 
-    public boolean isNetworkAvailable(Context context) {
-        final ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
-    }
-
     @Override
     public void onRestart() {
         rt_source = new PebblesTDLSource(this);
@@ -171,23 +166,10 @@ public class MainActivity extends BaseACA
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
         } else if (id == R.id.my_music) {
-            if (isNetworkAvailable(this)) {
-                Intent intent = new Intent(this, MusicDashBoard.class);
-                String message = "Testing Commence";
-                intent.putExtra(EXTRA_MESSAGE, message);
-                startActivity(intent);
-            } else {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("No Shit!");
-                alert.setMessage("You need Internet Connection BRO!");
-                alert.setNegativeButton("Fuck Off", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
-            }
+            Intent intent = new Intent(this, MusicDashBoard.class);
+            String message = "Testing Commence";
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

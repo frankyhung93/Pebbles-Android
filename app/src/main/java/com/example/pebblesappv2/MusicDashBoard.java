@@ -1,8 +1,11 @@
 package com.example.pebblesappv2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +26,7 @@ import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-public class MusicDashBoard extends BaseACA {
+public class MusicDashBoard extends BaseACA implements PlayerBarFragment.OnFragmentInteractionListener {
 
     Realm realm;
     ListView mListView;
@@ -34,6 +37,9 @@ public class MusicDashBoard extends BaseACA {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_dash_board);
+
+        // test code
+//        showPlayerBar();
 
         // Setup realm
         Realm.init(this);
@@ -85,10 +91,23 @@ public class MusicDashBoard extends BaseACA {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_music_sync) {
-            startActivityForResult(
-                    new Intent(MusicDashBoard.this, MusicSyncActivity.class),
-                    0);
-            return true;
+            if (isNetworkAvailable(this.getApplicationContext())) {
+                startActivityForResult(
+                        new Intent(MusicDashBoard.this, MusicSyncActivity.class),
+                        0);
+                return true;
+            } else {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setTitle("No Shit!");
+                alert.setMessage("You need Internet Connection BRO!");
+                alert.setNegativeButton("Fuck Off", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -111,5 +130,26 @@ public class MusicDashBoard extends BaseACA {
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+//    private void showPlayerBar() {
+//        PlayerBarFragment pbfragment = new PlayerBarFragment();
+//
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.playerbar_container, pbfragment).commit();
+//    }
+
+    // Handle all four types of events passed from the player bar fragment
+    public void onCancelButtonClicked() {
+
+    }
+    public void onPlayButtonClicked() {
+
+    }
+    public void onBackButtonClicked() {
+
+    }
+    public void onNextButtonClicked() {
+
     }
 }

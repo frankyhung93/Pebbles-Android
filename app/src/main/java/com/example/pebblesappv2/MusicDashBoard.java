@@ -26,7 +26,7 @@ import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-public class MusicDashBoard extends BaseACA implements PlayerBarFragment.OnFragmentInteractionListener {
+public class MusicDashBoard extends BaseACA {
 
     Realm realm;
     ListView mListView;
@@ -132,24 +132,4 @@ public class MusicDashBoard extends BaseACA implements PlayerBarFragment.OnFragm
         }
     }
 
-//    private void showPlayerBar() {
-//        PlayerBarFragment pbfragment = new PlayerBarFragment();
-//
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.playerbar_container, pbfragment).commit();
-//    }
-
-    // Handle all four types of events passed from the player bar fragment
-    public void onCancelButtonClicked() {
-
-    }
-    public void onPlayButtonClicked() {
-
-    }
-    public void onBackButtonClicked() {
-
-    }
-    public void onNextButtonClicked() {
-
-    }
 }

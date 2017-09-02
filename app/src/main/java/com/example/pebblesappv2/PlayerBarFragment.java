@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +24,12 @@ import android.widget.TextView;
 public class PlayerBarFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_SONGTITLE = "param1";
-//    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PLAYTYPE = "param1";
+    private static final String ARG_SONGTITLE = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-//    private String mParam2;
+    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private ImageButton playBtn;
@@ -44,14 +46,15 @@ public class PlayerBarFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
      * @return A new instance of fragment PlayerBarFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlayerBarFragment newInstance(String param1) {
+    public static PlayerBarFragment newInstance(String param1, String param2) {
         PlayerBarFragment fragment = new PlayerBarFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_SONGTITLE, param1);
-//        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PLAYTYPE, param1);
+        args.putString(ARG_SONGTITLE, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,8 +63,10 @@ public class PlayerBarFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_SONGTITLE);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam1 = getArguments().getString(ARG_PLAYTYPE);
+            mParam2 = getArguments().getString(ARG_SONGTITLE);
+            Log.d("WTFFF", mParam1);
+            Log.d("WTFFF", mParam2);
         }
     }
 
@@ -72,7 +77,17 @@ public class PlayerBarFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_player_bar, container, false);
 
         TextView titleTV = (TextView) view.findViewById(R.id.showPlaying);
-        titleTV.setText("Now Playing: "+mParam1+" ...");
+        String barTitleText = "";
+        if (mParam1.equals(AlbumPlayList.TYPE_PLAY)) {
+            barTitleText = "<font color=#ffffff>Now Playing from</font> <font color=#0aff9d>"+((AlbumPlayList)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
+        } else if (mParam1.equals(AlbumPlayList.TYPE_SHUFFLE)) {
+            barTitleText = "<font color=#ffffff>Now Shuffling from</font> <font color=#0aff9d>"+((AlbumPlayList)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            titleTV.setText(Html.fromHtml(barTitleText, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            titleTV.setText(Html.fromHtml(barTitleText));
+        }
 
         playBtn = (ImageButton) view.findViewById(R.id.playbutton);
         nextBtn = (ImageButton) view.findViewById(R.id.playnextbutton);

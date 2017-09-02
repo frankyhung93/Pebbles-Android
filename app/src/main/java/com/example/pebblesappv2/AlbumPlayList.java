@@ -21,6 +21,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +59,9 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
     private Intent playIntent;
     private boolean musicBound=false;
 
+    public final static String TYPE_PLAY = "play";
+    public final static String TYPE_SHUFFLE = "shuffle";
+
     //connect to the service
     private ServiceConnection musicConnection = new ServiceConnection(){
 
@@ -66,13 +70,18 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
             MusicBinder binder = (MusicBinder)service;
             //get service
             musicSrv = binder.getService();
-            //pass list
-//            musicSrv.setList(songList);
             musicBound = true;
+            Log.d("DEBUGS", "onServiceConnected - musicBound is "+musicBound);
+            if (musicSrv.isPlayerSet() && (musicSrv.isPlaying() || musicSrv.isShuffling())) {
+                // show the appropriate song title
+                showPlayerBar(musicSrv.returnPlayingType(), getTitleFromVidId(getNameFromFilePath(musicSrv.returnCurrentUri().getPath())));
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+//            musicSrv = null;
+            Log.d("DEBUGS", "onServiceDisconnected - musicBound is "+musicBound);
             musicBound = false;
         }
     };
@@ -84,8 +93,8 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
 
         if(playIntent==null){
             playIntent = new Intent(getApplicationContext(), MusicService.class);
-            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             startService(playIntent);
+            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
         }
 
         // Setup realm
@@ -137,6 +146,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         final AlbumPlayListAdapter adapter = new AlbumPlayListAdapter(this, songs);
         mListView.setAdapter(adapter);
 
+        // Simply play a song when you click on a list item(song)
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -147,7 +157,9 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
                 Uri myUri = Uri.parse(new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, song_file).toString()); // initialize Uri here
 
                 // set song and play song, by calling the serv methods, also display the playerbar
-                showPlayerBar(song_title);
+                musicSrv.setPlayingType(TYPE_PLAY);
+                musicSrv.setPlayingAlbum(receivedTitle);
+                showPlayerBar(TYPE_PLAY, song_title);
                 musicSrv.playSong(myUri);
 
             }
@@ -177,30 +189,48 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
     }
 
     public String getTitleFromVidId(String vidId) {
-        Log.d("ABC", vidId);
+//        Log.d("ABC", vidId);
         RealmQuery<YTDownloads> query = realm.where(YTDownloads.class);
         YTDownloads vid = query.equalTo("video_id", vidId).findFirst();
         return vid.getVideo_title();
     }
 
-    private void setPlayerBarTitle(String title) {
-        View fview = returnPlayerBarView();
-        TextView songTitle = (TextView) fview.findViewById(R.id.showPlaying);
-        songTitle.setText("Now Playing: "+title+" ...");
-    }
-
     private void playShuffle() {
+        musicSrv.setPlayingType(TYPE_SHUFFLE);
+        musicSrv.setPlayingAlbum(receivedTitle);
         Collections.shuffle(playlist);
-        Log.d("PERFECTO", getNameFromFilePath(playlist.get(0).getPath()));
-        showPlayerBar(getTitleFromVidId(getNameFromFilePath(playlist.get(0).getPath())));
+        showPlayerBar(TYPE_SHUFFLE, getTitleFromVidId(getNameFromFilePath(playlist.get(0).getPath())));
         musicSrv.playShuffle(playlist);
     }
 
-    private void showPlayerBar(String songtitle) {
-        PlayerBarFragment pbfragment = PlayerBarFragment.newInstance(songtitle);
+    private void setPlayerBarTitle(String playType, String title) {
+        String barTitleText = "";
+        View fview = returnPlayerBarView();
+        TextView songTitle = (TextView) fview.findViewById(R.id.showPlaying);
+        if (playType.equals(TYPE_PLAY)) {
+            barTitleText = "<font color=#ffffff>Now Playing from</font> <font color=#0aff9d>"+musicSrv.returnPlayingAlbum()+"</font><font color=#ffffff>: "+title+" ...</font>";
+        } else if (playType.equals(TYPE_SHUFFLE)) {
+            barTitleText = "<font color=#ffffff>Now Shuffling from</font> <font color=#0aff9d>"+musicSrv.returnPlayingAlbum()+"</font><font color=#ffffff>: "+title+" ...</font>";
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            songTitle.setText(Html.fromHtml(barTitleText, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            songTitle.setText(Html.fromHtml(barTitleText));
+        }
+    }
 
-        getFragmentManager().beginTransaction()
-                .add(R.id.playerbar_container, pbfragment, "playerbar").commit();
+    private void showPlayerBar(String playType, String songtitle) {
+        Fragment pbf =  getFragmentManager().findFragmentByTag("playerbar");
+        if (pbf == null) {
+            Log.d("WTFTW", playType+" "+songtitle);
+            PlayerBarFragment pbfragment = PlayerBarFragment.newInstance(playType, songtitle);
+
+            getFragmentManager().beginTransaction()
+                    .add(R.id.playerbar_container, pbfragment, "playerbar").commit();
+        } else {
+            Log.d("WTFTW", "pbf is not null");
+            setPlayerBarTitle(playType, songtitle);
+        }
     }
 
     private void closePlayerBar() {
@@ -238,12 +268,12 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
 
     @Override
     public void onBackButtonClicked() {
-
+        musicSrv.playPrevious();
     }
 
     @Override
     public void onNextButtonClicked() {
-
+        musicSrv.playNext();
     }
 
     // Handling the received Intents for the "my-integer" event
@@ -252,7 +282,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
             String songPath = intent.getStringExtra("songPath");
-            setPlayerBarTitle(vid_title_map.get(getNameFromFilePath(songPath)));
+            setPlayerBarTitle(musicSrv.returnPlayingType(), vid_title_map.get(getNameFromFilePath(songPath)));
         }
     };
     @Override
@@ -262,21 +292,42 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mMessageReceiver,
                         new IntentFilter("Next-Song"));
-        // Show the appropriate playerBar
+        // Rebind and recreate the musicSrv object (although service keeps running in the bg)
+        Log.d("DEBUGS", "ON RESUME - musicBound is "+musicBound);
+        if(playIntent==null){
+            playIntent = new Intent(getApplicationContext(), MusicService.class);
+            startService(playIntent);
+            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+        } else {
+            if (musicSrv != null) {
+                Log.d("DEBUGS", "ON RESUME - musicSrc is not null");
+                showPlayerBar(musicSrv.returnPlayingType(), vid_title_map.get(getNameFromFilePath(musicSrv.returnCurrentUri().getPath())));
+            } else {
+                Log.d("DEBUGS", "ON RESUME - musicSrc is null");
+                startService(playIntent);
+                bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            }
 
+        }
     }
     @Override
     protected void onPause() {
+        if (musicBound) {
+            // Unbind the service
+            Log.d("DEBUGS", "unbinding service Now");
+            unbindService(musicConnection);
+            playIntent = null;
+            musicBound = false;
+        }
+        Log.d("DEBUGS", "onPause Now");
         // Unregister since the activity is not visible
         LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(mMessageReceiver);
         super.onPause();
     }
 
-    @Override
-    protected void onDestroy() {
-        stopService(playIntent);
-        musicSrv=null;
-        super.onDestroy();
+    //WTF....
+    public String returnPlayingAlbum() {
+        return musicSrv.returnPlayingAlbum();
     }
 }

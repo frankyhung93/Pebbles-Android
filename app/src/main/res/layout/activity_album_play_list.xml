@@ -5,14 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="0sp"
     android:fitsSystemWindows="true"
-    android:background="@drawable/milky_mount_blur_01"
+    android:background="@drawable/auroraphoto01"
     tools:context="com.example.pebblesappv2.AlbumPlayList">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/TransparentActionBar">
+        android:theme="@style/TransparentActionBar"
+        app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/general_toolbar"
@@ -20,7 +22,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@null"
             android:theme="@style/ThemeOverlay.PepApp.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <TextView
                 android:id="@+id/music_toolbar_title"
@@ -29,10 +31,16 @@
                 android:layout_gravity="center"
                 android:fontFamily="casual"
                 android:text=""
-                android:textSize="24sp" />
+                android:textSize="16sp" />
+
 
         </android.support.v7.widget.Toolbar>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:background="#20ffffff" />
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout

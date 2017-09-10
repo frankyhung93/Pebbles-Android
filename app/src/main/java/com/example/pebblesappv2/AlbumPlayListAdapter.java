@@ -1,10 +1,13 @@
 package com.example.pebblesappv2;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +34,7 @@ public class AlbumPlayListAdapter extends ArrayAdapter<YTDownloads> {
 
     // View lookup cache
     private static class ViewHolder {
-        ImageView song_cover;
+        CustomImageView song_cover;
         TextView song_title;
         TextView song_desc;
     }
@@ -81,7 +84,7 @@ public class AlbumPlayListAdapter extends ArrayAdapter<YTDownloads> {
 
             viewHolder = new AlbumPlayListAdapter.ViewHolder();
             convertView = mInflater.inflate(R.layout.song_row, parent, false);
-            viewHolder.song_cover = (ImageView) convertView.findViewById(R.id.song_cover);
+            viewHolder.song_cover = (CustomImageView) convertView.findViewById(R.id.song_cover);
             viewHolder.song_title = (TextView) convertView.findViewById(R.id.song_title);
             viewHolder.song_desc = (TextView) convertView.findViewById(R.id.song_desc);
 

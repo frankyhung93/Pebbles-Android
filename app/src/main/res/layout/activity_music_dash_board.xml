@@ -6,13 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/musicbg_1"
+    android:background="@drawable/auroraphoto03"
     tools:context="com.example.pebblesappv2.MusicDashBoard">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/TransparentActionBar">
+        android:theme="@style/TransparentActionBar"
+        app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/general_toolbar"
@@ -32,6 +33,12 @@
                 android:textSize="24sp" />
 
         </android.support.v7.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:background="#20ffffff" />
 
     </android.support.design.widget.AppBarLayout>
 

@@ -66,4 +66,13 @@
             android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/action_music_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/colorWhite"
+        android:src="@drawable/cloud_sync" />
+
 </android.support.design.widget.CoordinatorLayout>

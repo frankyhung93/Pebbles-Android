@@ -69,7 +69,11 @@
             android:label="My Music"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         <activity
             android:name=".AlbumPlayList"
             android:label="PlayList"
@@ -80,7 +84,17 @@
         <service
             android:name=".MusicService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".SearchResultsActivity"
+            android:label="Search List"
+            android:parentActivityName=".MusicDashBoard"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

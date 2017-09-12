@@ -1,13 +1,18 @@
 package com.example.pebblesappv2;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -73,12 +78,44 @@ public class MusicDashBoard extends BaseACA {
                 startActivityForResult(intoAlbum, 0);
             }
         });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.action_music_sync);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                if (isNetworkAvailable(getApplicationContext())) {
+                    startActivityForResult(
+                            new Intent(MusicDashBoard.this, MusicSyncActivity.class),
+                            0);
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(MusicDashBoard.this, R.style.myDialog));
+                    alert.setTitle("No Shit!");
+                    alert.setMessage("You need Internet Connection BRO!");
+                    alert.setNegativeButton("Fuck Off", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
+                }
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.music_menu, menu);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -90,25 +127,7 @@ public class MusicDashBoard extends BaseACA {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_music_sync) {
-            if (isNetworkAvailable(this.getApplicationContext())) {
-                startActivityForResult(
-                        new Intent(MusicDashBoard.this, MusicSyncActivity.class),
-                        0);
-                return true;
-            } else {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("No Shit!");
-                alert.setMessage("You need Internet Connection BRO!");
-                alert.setNegativeButton("Fuck Off", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
-            }
-        }
+
 
         return super.onOptionsItemSelected(item);
     }

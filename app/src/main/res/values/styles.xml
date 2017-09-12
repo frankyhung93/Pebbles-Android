@@ -26,6 +26,7 @@
         <item name="actionBarTheme">@style/PepApp.WhiteBackArrowTheme</item>
         <item name="colorControlNormal">@color/colorWhite</item>
         <item name="android:colorControlNormal">@color/colorWhite</item>
+        <item name="android:homeAsUpIndicator">@drawable/arrow_back_white</item>
     </style>
 
     <style name="PepApp.WhiteBackArrowTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
@@ -50,4 +51,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="myDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

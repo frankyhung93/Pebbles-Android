@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_music_sync"
-        android:icon="@drawable/cloud_sync"
-        android:orderInCategory="100"
-        android:title="Music Sync"
-        app:showAsAction="always"/>
+        android:id="@+id/action_search"
+        android:icon="@drawable/white_search"
+        android:title="Search Song"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
 </menu>

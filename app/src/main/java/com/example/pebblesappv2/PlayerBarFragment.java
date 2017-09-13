@@ -26,10 +26,12 @@ public class PlayerBarFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PLAYTYPE = "param1";
     private static final String ARG_SONGTITLE = "param2";
+    private static final String ARG_ACTIVITY = "param3";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String mParam3;
 
     private OnFragmentInteractionListener mListener;
     private ImageButton playBtn;
@@ -47,14 +49,16 @@ public class PlayerBarFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
+     * @param param3 Parameter 3.
      * @return A new instance of fragment PlayerBarFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PlayerBarFragment newInstance(String param1, String param2) {
+    public static PlayerBarFragment newInstance(String param1, String param2, String param3) {
         PlayerBarFragment fragment = new PlayerBarFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PLAYTYPE, param1);
         args.putString(ARG_SONGTITLE, param2);
+        args.putString(ARG_ACTIVITY, param3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,8 +69,7 @@ public class PlayerBarFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PLAYTYPE);
             mParam2 = getArguments().getString(ARG_SONGTITLE);
-            Log.d("WTFFF", mParam1);
-            Log.d("WTFFF", mParam2);
+            mParam3 = getArguments().getString(ARG_ACTIVITY);
         }
     }
 
@@ -79,9 +82,15 @@ public class PlayerBarFragment extends Fragment {
         TextView titleTV = (TextView) view.findViewById(R.id.showPlaying);
         String barTitleText = "";
         if (mParam1.equals(AlbumPlayList.TYPE_PLAY)) {
-            barTitleText = "<font color=#ffffff>Now Playing from</font> <font color=#0aff9d>"+((AlbumPlayList)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
+            if (mParam3.equals("AlbumPlayList"))
+                barTitleText = "<font color=#ffffff>Now Playing from</font> <font color=#0aff9d>"+((AlbumPlayList)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
+            else if (mParam3.equals("SearchResultsActivity"))
+                barTitleText = "<font color=#ffffff>Now Playing from</font> <font color=#0aff9d>"+((SearchResultsActivity)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
         } else if (mParam1.equals(AlbumPlayList.TYPE_SHUFFLE)) {
-            barTitleText = "<font color=#ffffff>Now Shuffling from</font> <font color=#0aff9d>"+((AlbumPlayList)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
+            if (mParam3.equals("AlbumPlayList"))
+                barTitleText = "<font color=#ffffff>Now Shuffling from</font> <font color=#0aff9d>"+((AlbumPlayList)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
+            else if (mParam3.equals("SearchResultsActivity"))
+                barTitleText = "<font color=#ffffff>Now Shuffling from</font> <font color=#0aff9d>"+((SearchResultsActivity)getActivity()).returnPlayingAlbum()+"</font><font color=#ffffff>: "+mParam2+" ...</font>";
         }
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             titleTV.setText(Html.fromHtml(barTitleText, Html.FROM_HTML_MODE_LEGACY));

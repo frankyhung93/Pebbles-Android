@@ -6,6 +6,7 @@
     <string name="WeekPreferenceKey">com.example.pebblesappv2.WEEKDAYPREF</string>
     <string name="action_settings">Settings</string>
     <string name="music_title">Flows</string>
+    <string name="search_list_title">Search List</string>
     <string name="songs_prefix">Songs: </string>
     <string name="intent_extra_tagId">EXTRA_TAGID</string>
 

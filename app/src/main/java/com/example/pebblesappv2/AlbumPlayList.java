@@ -223,7 +223,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         Fragment pbf =  getFragmentManager().findFragmentByTag("playerbar");
         if (pbf == null) {
             Log.d("WTFTW", playType+" "+songtitle);
-            PlayerBarFragment pbfragment = PlayerBarFragment.newInstance(playType, songtitle);
+            PlayerBarFragment pbfragment = PlayerBarFragment.newInstance(playType, songtitle, "AlbumPlayList");
 
             getFragmentManager().beginTransaction()
                     .add(R.id.playerbar_container, pbfragment, "playerbar").commit();

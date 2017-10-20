@@ -16,14 +16,6 @@ class PebblesTDLSource {
             PebbleSQLHelper.COLUMN_TIME_TDL,
             PebbleSQLHelper.COLUMN_DATE_TDL,
             PebbleSQLHelper.COLUMN_LUPDATE_TIME_TDL};
-    private String[] allColumns_routines = {
-            PebbleSQLHelper.COLUMN_ID_ROUTINES,
-            PebbleSQLHelper.COLUMN_ICON_ID_ROUTINES,
-            PebbleSQLHelper.COLUMN_ICON_NAME_ROUTINES,
-            PebbleSQLHelper.COLUMN_ICON_BG_COLOR_ROUTINES,
-            PebbleSQLHelper.COLUMN_ICON_TX_COLOR_ROUTINES,
-            PebbleSQLHelper.COLUMN_LUPDATE_TIME_ROUTINES
-    };
 
     PebblesTDLSource(Context context) {
         dbHelper = PebbleSQLHelper.getInstance(context);
@@ -86,71 +78,6 @@ class PebblesTDLSource {
 
     private ToDoItem cursorToTDItem(Cursor cursor) {
         return new ToDoItem(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-    }
-
-    //////////////////////////////
-    // Methods for RoutineItems //
-    //////////////////////////////
-
-    RoutineItem CreateRoutineItem(long rt_icon_id, String rt_icon_name, long rt_bg_color, long rt_tx_color) {
-        if (rt_icon_id == -1 || rt_bg_color == -1 || rt_tx_color == -1) {
-            return null;
-        }
-        long milis = System.currentTimeMillis();
-        ContentValues values = new ContentValues();
-        values.put(PebbleSQLHelper.COLUMN_ICON_ID_ROUTINES, rt_icon_id);
-        values.put(PebbleSQLHelper.COLUMN_ICON_NAME_ROUTINES, rt_icon_name);
-        values.put(PebbleSQLHelper.COLUMN_ICON_BG_COLOR_ROUTINES, rt_bg_color);
-        values.put(PebbleSQLHelper.COLUMN_ICON_TX_COLOR_ROUTINES, rt_tx_color);
-        values.put(PebbleSQLHelper.COLUMN_LUPDATE_TIME_ROUTINES, milis);
-        long insertID = database.insert(PebbleSQLHelper.TABLE_NAME_ROUTINES, null, values);
-        Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, PebbleSQLHelper.COLUMN_ID_ROUTINES + " = " + insertID, null, null, null, null);
-        cursor.moveToFirst();
-        RoutineItem rtItem = cursorToRoutineItem(cursor);
-        cursor.close();
-        return rtItem;
-    }
-
-    void DeleteRoutineItem(long rt_id) {
-        database.delete(PebbleSQLHelper.TABLE_NAME_ROUTINES, PebbleSQLHelper.COLUMN_ID_ROUTINES + " = " + rt_id, null);
-    }
-
-    ArrayList<RoutineItem> getRoutines() {
-        ArrayList<RoutineItem> init_data = new ArrayList<>();
-        Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, null, null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            RoutineItem rtItem = cursorToRoutineItem(cursor);
-            init_data.add(rtItem);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return init_data;
-    }
-
-    ArrayList<RoutineItem> getRoutinesByIdList(String idList) {
-        ArrayList<RoutineItem> init_data = new ArrayList<>();
-        Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, "_id IN ("+idList+")", null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            RoutineItem rtItem = cursorToRoutineItem(cursor);
-            init_data.add(rtItem);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return init_data;
-    }
-
-    private RoutineItem cursorToRoutineItem(Cursor cursor) {
-        return new RoutineItem(cursor.getLong(0), cursor.getLong(1), cursor.getString(2), cursor.getLong(3), cursor.getLong(4));
-    }
-
-    Integer getResIdFromRoutineId(Integer recordId) {
-        Cursor cursor = database.query(PebbleSQLHelper.TABLE_NAME_ROUTINES, allColumns_routines, PebbleSQLHelper.COLUMN_ID_ROUTINES + " = " + recordId, null, null, null, null);
-        cursor.moveToFirst();
-        RoutineItem rtItem = cursorToRoutineItem(cursor);
-        cursor.close();
-        return (int)rtItem.getRtIconId();
     }
 
 }

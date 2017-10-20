@@ -43,24 +43,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RoutinesActivity"
-            android:label="All Routines"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RoutinesAddActivity"
-            android:label="Add a Routine"
-            android:parentActivityName=".RoutinesActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".WeeklyRtActivity"
-            android:label="Weekly Routines"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".MusicSyncActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen" />

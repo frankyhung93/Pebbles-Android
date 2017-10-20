@@ -3,30 +3,35 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorOrange</item>
+        <item name="colorPrimaryDark">@color/colorBisque</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:actionMenuTextColor">@color/colorBlack</item>
+        <!--<item name="android:titleTextColor">@color/colorBlack</item>-->
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="android:colorControlNormal">@color/colorBlack</item>
     </style>
 
     <style name="TransparentActionBar" parent="@android:style/Theme.Holo.Light">
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="android:background">@null</item>
-        <item name="android:actionMenuTextColor">@color/colorWhite</item>
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="colorControlNormal">@color/colorWhite</item>
-        <item name="android:colorControlNormal">@color/colorWhite</item>
+        <item name="android:actionMenuTextColor">@color/colorBlack</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="android:colorControlNormal">@color/colorBlack</item>
         <!-- Support library compatibility -->
         <item name="background">@null</item>
     </style>
 
     <style name="ThemeOverlay.PepApp.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <!-- Parent theme sets colorControlNormal to textColorPrimary. -->
-        <item name="android:textColorPrimary">@color/colorWhite</item>
-        <item name="android:textColorSecondary">@color/colorWhite</item>
-        <item name="actionBarTheme">@style/PepApp.WhiteBackArrowTheme</item>
-        <item name="colorControlNormal">@color/colorWhite</item>
-        <item name="android:colorControlNormal">@color/colorWhite</item>
-        <item name="android:homeAsUpIndicator">@drawable/arrow_back_white</item>
+        <item name="android:textColorPrimary">@color/colorBlack</item>
+        <item name="android:textColorSecondary">@color/colorBlack</item>
+        <item name="actionBarTheme">@style/PepApp.BlackBackArrowTheme</item>
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="android:colorControlNormal">@color/colorBlack</item>
+        <!--<item name="android:homeAsUpIndicator">@drawable/arrow_back_white</item>-->
     </style>
 
     <style name="PepApp.WhiteBackArrowTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
@@ -35,11 +40,17 @@
         <item name="android:colorControlNormal">@color/colorWhite</item>
     </style>
 
+    <style name="PepApp.BlackBackArrowTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- THIS is where you can color the arrow! -->
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="android:colorControlNormal">@color/colorBlack</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorControlNormal">@color/colorWhite</item>
-        <item name="android:colorControlNormal">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="android:colorControlNormal">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.FullScreen">

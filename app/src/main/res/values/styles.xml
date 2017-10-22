@@ -46,11 +46,9 @@
         <item name="android:colorControlNormal">@color/colorBlack</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorControlNormal">@color/colorBlack</item>
-        <item name="android:colorControlNormal">@color/colorBlack</item>
     </style>
 
     <style name="AppTheme.FullScreen">

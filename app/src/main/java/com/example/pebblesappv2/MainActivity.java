@@ -105,12 +105,12 @@ public class MainActivity extends BaseACA
             String message = "TDL So Many";
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
-        } else if (id == R.id.routines_page) {
-//            Intent intent = new Intent(this, RoutinesActivity.class);
-//            String message = "Grids So Many";
-//            intent.putExtra(EXTRA_MESSAGE, message);
-//            startActivity(intent);
-        } else if (id == R.id.weekly_rt_page) {
+        } else if (id == R.id.rewards_page) {
+            Intent intent = new Intent(this, RewardsList.class);
+            String message = "Get Rewards!";
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
+        } else if (id == R.id.challenges_page) {
 //            Intent intent = new Intent(this, WeeklyRtActivity.class);
 //            String message = "7 days";
 //            intent.putExtra(EXTRA_MESSAGE, message);

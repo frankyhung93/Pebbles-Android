@@ -5,19 +5,19 @@
         <item
             android:id="@+id/tdl_page"
             android:icon="@drawable/write"
-            android:title="To-Do List" />
+            android:title="Journal" />
         <item
-            android:id="@+id/routines_page"
-            android:icon="@drawable/pie_chart_1"
-            android:title="Routines Grid" />
+            android:id="@+id/rewards_page"
+            android:icon="@drawable/rewards"
+            android:title="Rewards" />
         <item
-            android:id="@+id/weekly_rt_page"
-            android:icon="@drawable/weekly_calendar"
-            android:title="Weekly Routines" />
+            android:id="@+id/challenges_page"
+            android:icon="@drawable/challenge"
+            android:title="Challenges" />
         <item
             android:id="@+id/my_music"
-            android:icon="@drawable/play_button"
-            android:title="My Music" />
+            android:icon="@drawable/tunes"
+            android:title="Tunes" />
     </group>
 
 </menu>

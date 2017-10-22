@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="5dp"
+        android:gravity="center_horizontal"
+        android:text="My Precious..."
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/eT_rewardname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Reward Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/eT_rewarddesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Reward Description"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/eT_gold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Mag Price (Gold)"
+        android:inputType="numberSigned" />
+
+    <EditText
+        android:id="@+id/eT_diamond"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Mag Price (Diamond)"
+        android:inputType="numberSigned" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Photo: "
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/choose_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/add" />
+</LinearLayout>

@@ -122,7 +122,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         albumTitle.setText(receivedTitle);
 
         // Set up videoId-extension Map object
-        String path = Environment.getExternalStorageDirectory().toString() + File.separator + folder_name;
+        String path = getFilesDir().toString() + File.separator + folder_name;
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
@@ -140,7 +140,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
             songs.add(song);
             String song_id = song.getVideo_id();
             String song_file = song_id + "." + vid_ext_map.get(song_id);
-            Uri myUri = Uri.parse(new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, song_file).toString());
+            Uri myUri = Uri.parse(new File(getFilesDir() + File.separator + folder_name, song_file).toString());
             playlist.add(myUri);
         }
         final AlbumPlayListAdapter adapter = new AlbumPlayListAdapter(this, songs);
@@ -154,7 +154,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
                 String song_id = song.getVideo_id();
                 String song_title = song.getVideo_title();
                 String song_file = song_id + "." + vid_ext_map.get(song_id);
-                Uri myUri = Uri.parse(new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, song_file).toString()); // initialize Uri here
+                Uri myUri = Uri.parse(new File(getFilesDir() + File.separator + folder_name, song_file).toString()); // initialize Uri here
 
                 // set song and play song, by calling the serv methods, also display the playerbar
                 musicSrv.setPlayingType(TYPE_PLAY);

@@ -316,18 +316,18 @@ public class MusicSyncActivity extends BaseACA {
 
                     // download the file
                     input = connection.getInputStream();
-                    File f = new File(Environment.getExternalStorageDirectory(), folder_name);
+                    File f = new File(getFilesDir(), folder_name);
                     if (!f.exists()) {
                         if (!f.mkdirs()) {
                             Log.d("MKDIR FAILURE", f.toString());
                         }
                     }
-                    Log.d("FILE PATH:", Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+                    Log.d("FILE PATH:", getFilesDir() + File.separator + folder_name + File.separator + filename);
 
                     // check if the file already exists
-                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, filename);
+                    File file = new File(getFilesDir() + File.separator + folder_name, filename);
                     if (!file.exists()) {
-                        output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+                        output = new FileOutputStream(getFilesDir() + File.separator + folder_name + File.separator + filename);
 
                         byte data[] = new byte[4096];
                         long total = 0;
@@ -375,10 +375,10 @@ public class MusicSyncActivity extends BaseACA {
             input = null;
             output = null;
             connection = null;
+            download_count = 0;
             folder_name = "youtube_thumbnails";
             // Download the image thumbnails for the song files
             for (String videoId : videoIds) {
-
                 try {
                     // This object is used to make YouTube Data API requests. The last
                     // argument is required, but since we don't need anything
@@ -423,18 +423,18 @@ public class MusicSyncActivity extends BaseACA {
 
                     // download the file
                     input = connection.getInputStream();
-                    File f = new File(Environment.getExternalStorageDirectory(), folder_name);
+                    File f = new File(getFilesDir(), folder_name);
                     if (!f.exists()) {
                         if (!f.mkdirs()) {
                             Log.d("MKDIR FAILURE", f.toString());
                         }
                     }
-                    Log.d("FILE PATH:", Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+                    Log.d("FILE PATH:", getFilesDir() + File.separator + folder_name + File.separator + filename);
 
                     // check if the file already exists
-                    File file = new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, filename);
+                    File file = new File(getFilesDir() + File.separator + folder_name, filename);
                     if (!file.exists()) {
-                        output = new FileOutputStream(Environment.getExternalStorageDirectory() + File.separator + folder_name + File.separator + filename);
+                        output = new FileOutputStream(getFilesDir() + File.separator + folder_name + File.separator + filename);
 
                         byte data[] = new byte[4096];
                         long total = 0;

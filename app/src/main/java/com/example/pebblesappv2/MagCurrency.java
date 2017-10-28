@@ -18,7 +18,7 @@ public class MagCurrency extends RealmObject {
     private int amount;
     private String name;
 
-    public boolean initCurrency(Realm rm) {
+    public static boolean initCurrency(Realm rm) {
         try {
             RealmResults<MagCurrency> rs = rm.where(MagCurrency.class).findAll();
             if (rs.size() == 0) {

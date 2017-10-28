@@ -45,7 +45,7 @@ public class AlbumPlayListAdapter extends ArrayAdapter<YTDownloads> {
         mDataSource = songs;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // Set up videoId-extension Map object
-        String path = Environment.getExternalStorageDirectory().toString() + File.separator + folder_name;
+        String path = mContext.getFilesDir().toString() + File.separator + folder_name;
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
         File[] files = directory.listFiles();
@@ -95,7 +95,7 @@ public class AlbumPlayListAdapter extends ArrayAdapter<YTDownloads> {
 
         viewHolder.song_title.setText(songTitle);
         String filename = songId + "." + vid_ext_map.get(songId);
-        File imgFile = new File(Environment.getExternalStorageDirectory() + File.separator + folder_name, filename);
+        File imgFile = new File(mContext.getFilesDir() + File.separator + folder_name, filename);
         if(imgFile.exists()){
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             viewHolder.song_cover.setImageBitmap(myBitmap);

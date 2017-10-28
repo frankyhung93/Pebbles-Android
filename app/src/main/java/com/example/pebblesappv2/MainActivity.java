@@ -24,11 +24,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.realm.Realm;
+
 public class MainActivity extends BaseACA
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public final static String EXTRA_MESSAGE = "msg_one";
     public final String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +40,9 @@ public class MainActivity extends BaseACA
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Test Reset code
-//        SharedPreferences wkdayPref = this.getSharedPreferences(this.getString(R.string.WeekPreferenceKey), Context.MODE_PRIVATE);
-//        SharedPreferences.Editor prefEditor = wkdayPref.edit();
-//        prefEditor.putString("Saturday", "");
-//        prefEditor.commit();
-        //
+        Realm.init(this);
+        realm = Realm.getDefaultInstance();
+        Log.d("MagCurrency INIT", (MagCurrency.initCurrency(realm)?"true":"false"));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

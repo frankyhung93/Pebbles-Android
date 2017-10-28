@@ -2,10 +2,12 @@ package com.example.pebblesappv2;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmQuery;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
@@ -18,6 +20,8 @@ public class Rewards extends RealmObject {
     public static final int targeted = 2;
     public static final int redeemable = 3;
     public static final int redeemed = 4;
+    public static final String cover_dir = "reward_cover";
+    public static final String cover_prefix = "reward_cover_";
 
     @PrimaryKey
     private int id;
@@ -29,25 +33,98 @@ public class Rewards extends RealmObject {
     private Date want_day;
     private Date get_day;
     private String photo_path;
-    private int price;
+    private int mag_gold;
+    private int mag_diamond;
     private int status;
+
+    public static Rewards getRewardById(Realm rm, int id) {
+        RealmQuery<Rewards> q = rm.where(Rewards.class).equalTo("id", id);
+        Rewards rwd = q.findFirst();
+        return rwd;
+    }
+
+    public static void setRewardPhotoPath(Realm rm, final String filename, final int id) {
+        rm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Rewards target_rwd = getRewardById(realm, id);
+                target_rwd.setPhoto_path(filename);
+            }
+        });
+    }
+
+    public static int addReward(Realm rm, ArrayList<String> str_arr, ArrayList<Integer> int_arr) {
+        try {
+            Log.d("Reward Strings", str_arr.toString());
+            Log.d("Reward Integers", int_arr.toString());
+            int reward_id;
+            rm.beginTransaction();
+            reward_id = getNextId(rm);
+            if (reward_id==0) {
+                return 0;
+            }
+            Rewards rwd = rm.createObject(Rewards.class, getNextId(rm));
+            rwd.setReward_name(str_arr.get(0));
+            rwd.setReward_desc(str_arr.get(1));
+            rwd.setMag_gold(int_arr.get(0));
+            rwd.setMag_diamond(int_arr.get(1));
+            rwd.setWant_day(new Date());
+            rwd.setStatus(pending);
+//            rwd.setNextId(rm);
+            rm.commitTransaction();
+            return reward_id;
+        } catch (Exception e) {
+            Log.d("CUMON REWARDS", "Cannot add Reward..."+e.toString());
+            return 0;
+        }
+    }
+
+    public static void editReward(Realm rm, final ArrayList<String> str_arr, final ArrayList<Integer> int_arr, final int id) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Rewards target_rwd = getRewardById(realm, id);
+                    target_rwd.setReward_name(str_arr.get(0));
+                    target_rwd.setReward_desc(str_arr.get(1));
+                    target_rwd.setMag_gold(int_arr.get(0));
+                    target_rwd.setMag_diamond(int_arr.get(1));
+                }
+            });
+        } catch (Exception e) {
+            Log.d("CUMON EDIT REWARD", e.toString());
+        }
+    }
+
+    public static void deleteReward(Realm rm, final int id) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Rewards target_rwd = getRewardById(realm, id);
+                    target_rwd.deleteFromRealm();
+                }
+            });
+        } catch (Exception e) {
+            Log.d("CUMON DELETE REWARD", e.toString());
+        }
+    }
 
     public int getId() {
         return id;
     }
 
-    public boolean setNextId(Realm rm) {
+    public static int getNextId(Realm rm) {
         try {
-            Number number = rm.where(this.getClass()).max("id");
+            Number number = rm.where(Rewards.class).max("id");
             if (number != null) {
-                this.id = number.intValue() + 1;
+                return number.intValue() + 1;
             } else {
-                this.id = 1;
+                return 1;
             }
-            return true;
         } catch (ArrayIndexOutOfBoundsException e) {
             Log.d("CUMON REWARDS", "Cannot set the next id..."+e.toString());
-            return false;
+            return 0;
         }
     }
 
@@ -91,19 +168,27 @@ public class Rewards extends RealmObject {
         this.photo_path = photo_path;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getMag_gold() {
+        return mag_gold;
+    }
+
+    public void setMag_gold(int mag_gold) {
+        this.mag_gold = mag_gold;
+    }
+
+    public int getMag_diamond() {
+        return mag_diamond;
+    }
+
+    public void setMag_diamond(int mag_diamond) {
+        this.mag_diamond = mag_diamond;
     }
 }

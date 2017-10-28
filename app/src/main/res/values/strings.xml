@@ -9,6 +9,8 @@
     <string name="search_list_title">Search List</string>
     <string name="songs_prefix">Songs: </string>
     <string name="intent_extra_tagId">EXTRA_TAGID</string>
+    <string name="intent_extra_rewardId">EXTRA_REWARD_ID</string>
+    <string name="res_cover_photo">Reward Cover Photo</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

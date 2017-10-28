@@ -88,7 +88,13 @@
             android:label="My Rewards"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RewardDetail"
+            android:label="Reward Detail"
+            android:parentActivityName=".RewardsList"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar_StatusColor" />
     </application>
 
 </manifest>

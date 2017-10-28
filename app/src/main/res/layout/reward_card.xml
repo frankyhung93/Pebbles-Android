@@ -5,7 +5,7 @@
     android:id="@+id/reward_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_margin="6dp"
     android:elevation="3dp"
     cardCornerRadius="5dp">
 
@@ -28,8 +28,9 @@
 
         <ImageView
             android:id="@+id/reward_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/add"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"

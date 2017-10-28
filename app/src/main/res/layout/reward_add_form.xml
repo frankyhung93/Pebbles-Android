@@ -56,7 +56,9 @@
 
     <ImageButton
         android:id="@+id/choose_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:adjustViewBounds="true"
+        android:layout_gravity="center_horizontal"
         app:srcCompat="@drawable/add" />
 </LinearLayout>

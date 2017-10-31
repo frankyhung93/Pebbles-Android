@@ -101,7 +101,12 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChallengeDetail"></activity>
+        <activity
+            android:name=".ChallengeDetail"
+            android:label="Hey Challenge"
+            android:parentActivityName=".ChallengesList"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

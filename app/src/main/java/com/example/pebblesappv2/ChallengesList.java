@@ -44,10 +44,13 @@ public class ChallengesList extends BaseACA {
     ArrayAdapter<String> spinner_adp;
     AlertDialog addform;
     RecyclerView.Adapter adapter;
+    EditText challenge_name;
+    EditText challenge_desc;
     EditText challenge_counter;
     LinearLayout steps_container;
     Button plus_btn;
     View mExclusiveEmptyView;
+    Spinner challenge_type;
     Spinner rewards_type_spinner;
     Spinner rewards_spinner;
     LinearLayout rwd_ll;
@@ -141,8 +144,9 @@ public class ChallengesList extends BaseACA {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.challenge_add_form, null);
-
-        Spinner challenge_type = (Spinner) dialogLayout.findViewById(R.id.challenge_type_spinner);
+        challenge_name = (EditText) dialogLayout.findViewById(R.id.eT_challengename);
+        challenge_desc = (EditText) dialogLayout.findViewById(R.id.eT_challengedesc);
+        challenge_type = (Spinner) dialogLayout.findViewById(R.id.challenge_type_spinner);
         rewards_type_spinner = (Spinner) dialogLayout.findViewById(R.id.reward_type_spinner);
         rewards_spinner = (Spinner) dialogLayout.findViewById(R.id.rewards_spinner);
         rwd_ll = (LinearLayout) dialogLayout.findViewById(R.id.rwd_ll);
@@ -249,6 +253,51 @@ public class ChallengesList extends BaseACA {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
+                        ArrayList<String> str_arr = new ArrayList<>();
+//                        ArrayList<Integer> int_arr = new ArrayList<>();
+                        ArrayList<String> rwd_arr = new ArrayList<>();
+                        ArrayList<String> challenge_arr = new ArrayList<>();
+
+                        str_arr.add(challenge_name.getText().toString()); // str - 0
+                        str_arr.add(challenge_desc.getText().toString()); // str - 1
+                        rwd_arr.add(rewards_type_spinner.getSelectedItem().toString());
+                        switch (rewards_type_spinner.getSelectedItem().toString()) {
+                            case "Listed":
+                                rwd_arr.add(rewards_spinner.getSelectedItem().toString());
+                                break;
+                            case "Gold":
+                                rwd_arr.add(prize_gold.getText().toString());
+                                break;
+                            case "Diamond":
+                                rwd_arr.add(prize_diamond.getText().toString());
+                                break;
+                        }
+                        challenge_arr.add(challenge_type.getSelectedItem().toString());
+                        switch (challenge_type.getSelectedItem().toString()) {
+                            case "Single":
+                                break;
+                            case "Counter":
+                                challenge_arr.add(challenge_counter.getText().toString());
+                                break;
+                            case "Steps":
+                                int steps_count = steps_container.getChildCount() - 1;
+                                if (steps_count > 0) {
+                                    for (int i = 0; i < steps_count; i++) {
+                                        LinearLayout step_container = (LinearLayout) steps_container.getChildAt(i);
+                                        EditText step_name = (EditText) step_container.getChildAt(0);
+                                        challenge_arr.add(step_name.getText().toString());
+                                        Log.d("STEPPING UP", step_name.getText().toString());
+                                    }
+                                }
+                                break;
+                        }
+                        str_arr.add(start_date.getText().toString()); // str - 2
+                        if (time_limit.isChecked()) {
+                            str_arr.add(dead_line.getText().toString()); // str - 3
+                        }
+                        if (Challenges.addChallenge(realm, str_arr, rwd_arr, challenge_arr) > 0) {
+                            renewList();
+                        }
                         dialog.cancel();
                     }
                 })

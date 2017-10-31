@@ -43,6 +43,12 @@ public class Rewards extends RealmObject {
         return rwd;
     }
 
+    public static Rewards getPendingRewardByName(Realm rm, String name) {
+        RealmQuery<Rewards> q = rm.where(Rewards.class).equalTo("reward_name", name).equalTo("status", pending);
+        Rewards rwd = q.findFirst();
+        return rwd;
+    }
+
     public static void setRewardPhotoPath(Realm rm, final String filename, final int id) {
         rm.executeTransaction(new Realm.Transaction() {
             @Override

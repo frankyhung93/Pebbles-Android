@@ -2,14 +2,20 @@ package com.example.pebblesappv2;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by ChunFaiHung on 2017/10/22.
  */
 
 public class Challenge_steps extends RealmObject {
+    @PrimaryKey
     private int id;
     private String step_name;
     private Challenges challenge;
@@ -19,19 +25,28 @@ public class Challenge_steps extends RealmObject {
         return id;
     }
 
-    public boolean setNextId(Realm rm) {
+    public static int getNextId(Realm rm) {
         try {
-            Number number = rm.where(this.getClass()).max("id");
+            Number number = rm.where(Challenge_steps.class).max("id");
             if (number != null) {
-                this.id = number.intValue() + 1;
+                return number.intValue() + 1;
             } else {
-                this.id = 1;
+                return 1;
             }
-            return true;
         } catch (ArrayIndexOutOfBoundsException e) {
-            Log.d("CUMON STEPS", "Cannot set the next id..."+e.toString());
-            return false;
+            Log.d("CUMON CHALLENGE_STEPS", "Cannot set the next id..."+e.toString());
+            return 0;
         }
+    }
+
+    public static ArrayList<Challenge_steps> findStepsByChallenge(Realm rm, Challenges challenge) {
+        RealmQuery<Challenge_steps> query = rm.where(Challenge_steps.class).equalTo("challenge.id", challenge.getId());
+        RealmResults<Challenge_steps> rs = query.findAll();
+        ArrayList<Challenge_steps> cha_steps_arr = new ArrayList<>();
+        for (Challenge_steps step : rs) {
+            cha_steps_arr.add(step);
+        }
+        return cha_steps_arr;
     }
 
     public String getStep_name() {

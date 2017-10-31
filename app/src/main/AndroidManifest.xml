@@ -95,6 +95,13 @@
             android:parentActivityName=".RewardsList"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar_StatusColor" />
+        <activity
+            android:name=".ChallengesList"
+            android:label="My Challenges"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ChallengeDetail"></activity>
     </application>
 
 </manifest>

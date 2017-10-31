@@ -111,10 +111,10 @@ public class MainActivity extends BaseACA
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
         } else if (id == R.id.challenges_page) {
-//            Intent intent = new Intent(this, WeeklyRtActivity.class);
-//            String message = "7 days";
-//            intent.putExtra(EXTRA_MESSAGE, message);
-//            startActivity(intent);
+            Intent intent = new Intent(this, ChallengesList.class);
+            String message = "Never cease from growing";
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
         } else if (id == R.id.my_music) {
             Intent intent = new Intent(this, MusicDashBoard.class);
             String message = "Testing Commence";

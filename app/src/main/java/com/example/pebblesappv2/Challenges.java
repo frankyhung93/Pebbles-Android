@@ -18,10 +18,10 @@ public class Challenges extends RealmObject {
     private static final int type_counter = 2;
     private static final int type_steps = 3;
 
-    private static final int pending = 1;
-    private static final int in_progress = 2;
-    private static final int completed = 3;
-    private static final int failed = 4;
+    public static final int pending = 1;
+    public static final int in_progress = 2;
+    public static final int completed = 3;
+    public static final int failed = 4;
 
     @PrimaryKey
     private int id;

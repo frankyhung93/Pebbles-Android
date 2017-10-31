@@ -10,7 +10,22 @@
     <string name="songs_prefix">Songs: </string>
     <string name="intent_extra_tagId">EXTRA_TAGID</string>
     <string name="intent_extra_rewardId">EXTRA_REWARD_ID</string>
+    <string name="intent_extra_challengeId">EXTRA_CHALLENGE_ID</string>
     <string name="res_cover_photo">Reward Cover Photo</string>
+    <string name="choose_type">Choose a Challenge Type</string>
+    <string name="reward_type">Choose a Reward Type</string>
+    <string name="reward">Choose a Reward</string>
+
+    <string-array name="type_arrays">
+        <item>Counter</item>
+        <item>Steps</item>
+        <item>Single</item>
+    </string-array>
+    <string-array name="rwdtype_arrays">
+        <item>Listed</item>
+        <item>Gold</item>
+        <item>Diamond</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -10,6 +10,7 @@ import java.util.Date;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
@@ -53,6 +54,53 @@ public class Challenges extends RealmObject {
         RealmQuery<Challenges> query = rm.where(Challenges.class).equalTo("id", id);
         Challenges clg = query.findFirst();
         return clg;
+    }
+
+    public static void updateAllChallengesStatus(final Realm rm) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Integer[] stillOKstatus = {pending, in_progress};
+                    RealmQuery<Challenges> query = rm.where(Challenges.class).in("status", stillOKstatus);
+                    RealmResults<Challenges> rs = query.findAll();
+                    for (Challenges chal : rs) {
+                        updateChallengeStatus(rm, chal.getId());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.d("CUMON EDIT REWARD", e.toString());
+        }
+    }
+
+    public static void updateChallengeStatus(final Realm rm, final int challenge_id) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Challenges cha = getChallengeById(rm, challenge_id);
+                    Long now = System.currentTimeMillis();
+                    if (cha.getStart_date().getTime() > now) {
+                        cha.setStatus(pending);
+                    } else if (cha.getStart_date().getTime() <= now && cha.getDeadline().getTime() >= now) {
+                        if (cha.getMax_counter() == cha.getCurr_counter()) {
+                            cha.setStatus(completed);
+                        } else {
+                            cha.setStatus(in_progress);
+                        }
+                    } else if (cha.getDeadline().getTime() < now) {
+                        if (cha.getMax_counter() == cha.getCurr_counter()) {
+                            cha.setStatus(completed);
+                        } else {
+                            cha.setStatus(failed);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.d("CUMON UPDATE STATUS", e.toString());
+        }
     }
 
     public static int addChallenge(Realm rm, ArrayList<String> str_arr, ArrayList<String> rwd_arr, ArrayList<String> challenge_arr) {
@@ -99,20 +147,23 @@ public class Challenges extends RealmObject {
                     clg.setCha_prize_diamond(Integer.parseInt(rwd_arr.get(1)));
                     break;
             }
+
+            clg.setCurr_counter(0);
             switch (challenge_arr.get(0)) { // challenge type
                 case "Single":
                     clg.setType(type_simple);
+                    clg.setMax_counter(1);
                     break;
                 case "Counter":
                     clg.setType(type_counter);
                     clg.setMax_counter(Integer.parseInt(challenge_arr.get(1)));
-                    clg.setCurr_counter(0);
                     break;
                 case "Steps":
                     clg.setType(type_steps);
                     challenge_arr.remove(0);
                     if (challenge_arr.size() > 0) {
                         have_steps = true;
+                        clg.setMax_counter(challenge_arr.size());
                     }
                     break;
             }
@@ -139,6 +190,7 @@ public class Challenges extends RealmObject {
 
                 rm.commitTransaction();
             }
+            updateChallengeStatus(rm, challenge_id);
             return challenge_id;
         } catch (Exception e) {
             Log.d("CUMON ADD CHALLENGE", e.toString());

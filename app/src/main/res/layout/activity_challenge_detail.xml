@@ -1,9 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.example.pebblesappv2.ChallengeDetail">
 
-</android.support.constraint.ConstraintLayout>
+    <include layout="@layout/appbar_layout"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <ImageView
+            android:layout_margin="6dp"
+            android:id="@+id/challenge_status_pic"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/add_2" />
+
+        <TextView
+            android:id="@+id/challenge_status_cap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_gravity="center_horizontal"
+            android:text="" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorBisque"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="16dp"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:contentDescription="Start Date"
+                android:src="@drawable/weekly_calendar"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:id="@+id/challenge_start_date"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                android:padding="6dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_weight="9"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:contentDescription="Dead Line"
+                android:src="@drawable/skull"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:id="@+id/challenge_dead_line"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                android:padding="6dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_weight="9"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:contentDescription="Progress"
+                android:src="@drawable/rails"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:id="@+id/challenge_progress"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                android:padding="6dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_weight="9"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:contentDescription="Reward"
+                android:src="@drawable/reward_badge"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:id="@+id/challenge_reward"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                android:padding="6dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_weight="9"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

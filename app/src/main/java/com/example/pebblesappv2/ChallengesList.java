@@ -70,6 +70,9 @@ public class ChallengesList extends BaseACA {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // update challenges status
+        Challenges.updateAllChallengesStatus(realm);
+
         initViews();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_challenge);

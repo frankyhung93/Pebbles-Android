@@ -40,9 +40,9 @@ public class MainActivity extends BaseACA
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Realm.init(this);
-        realm = Realm.getDefaultInstance();
         Log.d("MagCurrency INIT", (MagCurrency.initCurrency(realm)?"true":"false"));
+        // Update challenges status
+//        Challenges.updateAllChallengesStatus(realm);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

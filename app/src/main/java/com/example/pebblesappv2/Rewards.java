@@ -59,6 +59,25 @@ public class Rewards extends RealmObject {
         });
     }
 
+    public static void updateRewardStatus(Realm rm, final Rewards rwd, final int cha_status) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    if (cha_status == Challenges.in_progress) {
+                        rwd.setStatus(targeted);
+                    } else if (cha_status == Challenges.completed) {
+                        rwd.setStatus(redeemable);
+                    } else if (cha_status == Challenges.failed) { // releasing the reward thus pending
+                        rwd.setStatus(pending);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.d("CUMON UPDATE RWD_STATUS", e.toString());
+        }
+    }
+
     public static int addReward(Realm rm, ArrayList<String> str_arr, ArrayList<Integer> int_arr) {
         try {
             Log.d("Reward Strings", str_arr.toString());

@@ -71,7 +71,7 @@ public class ChallengesList extends BaseACA {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // update challenges status
-        Challenges.updateAllChallengesStatus(realm);
+        Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingChallenges(realm));
 
         initViews();
 
@@ -102,7 +102,7 @@ public class ChallengesList extends BaseACA {
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);
         }
-        RealmQuery<Rewards> query_rwd = realm.where(Rewards.class).equalTo("status", 1);
+        RealmQuery<Rewards> query_rwd = realm.where(Rewards.class).equalTo("status", Rewards.pending);
         RealmResults<Rewards> rwds_rs = query_rwd.findAll();
         for (Rewards rwd : rwds_rs) {
             avail_rwds.add(rwd.getReward_name());

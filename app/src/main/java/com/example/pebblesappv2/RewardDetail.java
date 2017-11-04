@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -136,12 +137,13 @@ public class RewardDetail extends BaseACA {
         diamond_txt = (TextView) findViewById(R.id.diamond_txt);
         TextView gotit_txt = (TextView) findViewById(R.id.getday_txt);
 
-        want_day_txt.setText(rwd.getWant_day().toString());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        want_day_txt.setText(format.format(rwd.getWant_day()));
         desc_txt.setText(rwd.getReward_desc());
         currency_txt.setText(rwd.getMag_gold()+"");
         diamond_txt.setText(rwd.getMag_diamond()+"");
         if (rwd.getStatus() == Rewards.redeemed) {
-            gotit_txt.setText(rwd.getGet_day().toString());
+            gotit_txt.setText(format.format(rwd.getGet_day()));
         } else {
             LinearLayout getday_header = (LinearLayout) findViewById(R.id.get_day_header);
             getday_header.setVisibility(View.GONE);

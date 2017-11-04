@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,10 +32,11 @@ public class MainActivity extends BaseACA
 
     public final static String EXTRA_MESSAGE = "msg_one";
     public final String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Current Time", (new Date()).toString());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -42,7 +44,12 @@ public class MainActivity extends BaseACA
 
         Log.d("MagCurrency INIT", (MagCurrency.initCurrency(realm)?"true":"false"));
         // Update challenges status
-//        Challenges.updateAllChallengesStatus(realm);
+        Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingChallenges(realm));
+
+        TextView tv_mag_gold = (TextView) findViewById(R.id.tv_mag_gold);
+        TextView tv_mag_diamond = (TextView) findViewById(R.id.tv_mag_diamond);
+        tv_mag_gold.setText(MagCurrency.getGold(realm)+"");
+        tv_mag_diamond.setText(MagCurrency.getDiamond(realm)+"");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

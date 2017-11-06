@@ -55,6 +55,42 @@ public class MagCurrency extends RealmObject {
         return mc.getAmount();
     }
 
+    public static boolean shopGold(Realm rm, final int amount) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmQuery<MagCurrency> query = realm.where(MagCurrency.class).equalTo("id", 1);
+                    MagCurrency mc = query.findFirst();
+                    int current_amount = mc.getAmount();
+                    mc.setAmount(current_amount - amount);
+                }
+            });
+            return true;
+        } catch (Exception e) {
+            Log.d("CUMON SHOP CURRENCY", e.toString());
+            return false;
+        }
+    }
+
+    public static boolean shopDiamond(Realm rm, final int amount) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmQuery<MagCurrency> query = realm.where(MagCurrency.class).equalTo("id", 2);
+                    MagCurrency mc = query.findFirst();
+                    int current_amount = mc.getAmount();
+                    mc.setAmount(current_amount - amount);
+                }
+            });
+            return true;
+        } catch (Exception e) {
+            Log.d("CUMON SHOP CURRENCY", e.toString());
+            return false;
+        }
+    }
+
     public static void addCurrency(Realm rm, final int currency_type, final int amount) {
         try {
             rm.executeTransaction(new Realm.Transaction() {

@@ -89,7 +89,8 @@ public class MusicDashBoard extends BaseACA {
                             new Intent(MusicDashBoard.this, MusicSyncActivity.class),
                             0);
                 } else {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(new ContextThemeWrapper(MusicDashBoard.this, R.style.myDialog));
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MusicDashBoard.this);
+                    alert.create();
                     alert.setTitle("No Shit!");
                     alert.setMessage("You need Internet Connection BRO!");
                     alert.setNegativeButton("Fuck Off", new DialogInterface.OnClickListener() {

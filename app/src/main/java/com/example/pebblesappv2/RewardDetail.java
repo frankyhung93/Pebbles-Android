@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,9 +46,13 @@ public class RewardDetail extends BaseACA {
     private AlertDialog addform;
     private ImageButton choosePhoto = null;
     private Button editBtn = null;
+    private Button redeemBtn = null;
+    private Button buyBtn = null;
     private Button delBtn = null;
+    private TextView gotit_txt = null;
     private Bitmap bit_cover_photo = null;
     private Rewards rwd = null;
+    private ImageView end_breaker = null;
     private static final int SELECT_PICTURE = 10;
     private boolean photo_changed = false;
 
@@ -77,6 +82,9 @@ public class RewardDetail extends BaseACA {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             rwd_hero.setImageBitmap(myBitmap);
         }
+        fab = (FloatingActionButton) findViewById(R.id.rwd_fab);
+        gotit_txt = (TextView) findViewById(R.id.getday_txt);
+        end_breaker = (ImageView) findViewById(R.id.end_breaker);
 
         // Edit Button
         editBtn = (Button) findViewById(R.id.edit_btn);
@@ -87,6 +95,76 @@ public class RewardDetail extends BaseACA {
                 fillEditDialog(addform); // populate the Dialog with existing values
             }
         });
+        // Redeem Button
+        redeemBtn = (Button) findViewById(R.id.redeem_btn);
+        redeemBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(RewardDetail.this)
+                    .setTitle("Redeem Operation")
+                    .setMessage("Are you sure you have redeemed the reward?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            if (Rewards.redeemReward(realm, rwdId)) {
+                                rewardRedeemed_renewUI();
+                            }
+                            dialog.cancel();
+                        }})
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }}).show();
+            }
+        });
+        // Buy Button
+        buyBtn = (Button) findViewById(R.id.buy_btn);
+        buyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MagCurrency.getGold(realm) >= rwd.getMag_gold() || MagCurrency.getDiamond(realm) >= rwd.getMag_diamond()) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(RewardDetail.this);
+                    alert.create();
+                    alert.setTitle("You Got Moonney!");
+                    alert.setMessage("In which currency would you like to pay?");
+                    if (MagCurrency.getDiamond(realm) >= rwd.getMag_diamond()) {
+                        alert.setNeutralButton("Diamond", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            if (MagCurrency.shopDiamond(realm, rwd.getMag_diamond()) && Rewards.redeemReward(realm, rwdId)) { // should be in one transaction, lazy
+                                rewardRedeemed_renewUI();
+                            }
+                            dialog.dismiss();
+                            }
+                        });
+                    }
+                    if (MagCurrency.getGold(realm) >= rwd.getMag_gold()) {
+                        alert.setPositiveButton("Gold", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            if (MagCurrency.shopGold(realm, rwd.getMag_gold()) && Rewards.redeemReward(realm, rwdId)) { // should be in one transaction, lazy
+                                rewardRedeemed_renewUI();
+                            }
+                            dialog.dismiss();
+                            }
+                        });
+                    }
+                    alert.show();
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(RewardDetail.this);
+                    alert.create();
+                    alert.setTitle("No Shit!");
+                    alert.setMessage("You need Currency BRO!");
+                    alert.setNegativeButton("Fuck Off", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alert.show();
+                }
+            }
+        });
+
         delBtn = (Button) findViewById(R.id.del_btn);
         delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,24 +186,32 @@ public class RewardDetail extends BaseACA {
         });
 
         // Set fab icon & btns visibility
-        fab = (FloatingActionButton) findViewById(R.id.rwd_fab);
         switch (rwd.getStatus()) {
             case Rewards.pending:
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pending));
+                redeemBtn.setVisibility(View.GONE);
+                end_breaker.setVisibility(View.GONE);
                 break;
             case Rewards.targeted:
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.target));
+                redeemBtn.setVisibility(View.GONE);
                 editBtn.setVisibility(View.GONE);
+                buyBtn.setVisibility(View.GONE);
                 delBtn.setVisibility(View.GONE);
+                end_breaker.setVisibility(View.GONE);
                 break;
             case Rewards.redeemable:
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.moneybag));
                 editBtn.setVisibility(View.GONE);
+                buyBtn.setVisibility(View.GONE);
                 delBtn.setVisibility(View.GONE);
+                end_breaker.setVisibility(View.GONE);
                 break;
             case Rewards.redeemed:
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.openbox));
+                redeemBtn.setVisibility(View.GONE);
                 editBtn.setVisibility(View.GONE);
+                buyBtn.setVisibility(View.GONE);
                 delBtn.setVisibility(View.GONE);
                 break;
         }
@@ -135,7 +221,6 @@ public class RewardDetail extends BaseACA {
         desc_txt = (TextView) findViewById(R.id.description_txt);
         currency_txt = (TextView) findViewById(R.id.magcurrency_txt);
         diamond_txt = (TextView) findViewById(R.id.diamond_txt);
-        TextView gotit_txt = (TextView) findViewById(R.id.getday_txt);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         want_day_txt.setText(format.format(rwd.getWant_day()));
@@ -217,6 +302,20 @@ public class RewardDetail extends BaseACA {
         desc_txt.setText(rwd.getReward_desc());
         currency_txt.setText(rwd.getMag_gold()+"");
         diamond_txt.setText(rwd.getMag_diamond()+"");
+    }
+
+    private void rewardRedeemed_renewUI() {
+        rwd = Rewards.getRewardById(realm, rwdId);
+        fab.setImageDrawable(ContextCompat.getDrawable(RewardDetail.this, R.drawable.openbox));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        gotit_txt.setText(format.format(rwd.getGet_day()));
+        LinearLayout getday_header = (LinearLayout) findViewById(R.id.get_day_header);
+        getday_header.setVisibility(View.VISIBLE);
+        end_breaker.setVisibility(View.VISIBLE);
+        redeemBtn.setVisibility(View.GONE);
+        editBtn.setVisibility(View.GONE);
+        buyBtn.setVisibility(View.GONE);
+        delBtn.setVisibility(View.GONE);
     }
 
     private void fillEditDialog(AlertDialog dlg) {

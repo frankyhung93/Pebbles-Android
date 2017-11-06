@@ -59,6 +59,23 @@ public class Rewards extends RealmObject {
         });
     }
 
+    public static boolean redeemReward(Realm rm, final int id) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                Rewards target_rwd = getRewardById(realm, id);
+                target_rwd.setStatus(redeemed);
+                target_rwd.setGet_day(new Date());
+                }
+            });
+            return true;
+        } catch (Exception e) {
+            Log.d("CUMON REDEEM REWARD", e.toString());
+            return false;
+        }
+    }
+
     public static void updateRewardStatus(Realm rm, final Rewards rwd, final int cha_status) {
         try {
             rm.executeTransaction(new Realm.Transaction() {

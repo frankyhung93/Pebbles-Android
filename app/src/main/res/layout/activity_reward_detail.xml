@@ -272,6 +272,14 @@
                     android:layout_height="wrap_content"
                     />
 
+                <ImageView
+                    android:id="@+id/end_breaker"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorBisque"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"/>
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:paddingLeft="16dp"
@@ -291,6 +299,24 @@
                         android:layout_margin="8dp"
                         android:background="@drawable/cus_edit_btn"
                         android:text="Edit" />
+                    <Button
+                        android:id="@+id/redeem_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:elevation="8dp"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/cus_edit_btn"
+                        android:text="Redeem" />
+                    <Button
+                        android:id="@+id/buy_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:elevation="8dp"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/cus_edit_btn"
+                        android:text="Buy" />
                     <Button
                         android:id="@+id/del_btn"
                         android:layout_width="wrap_content"

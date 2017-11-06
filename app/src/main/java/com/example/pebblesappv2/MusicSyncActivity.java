@@ -26,7 +26,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -58,9 +61,13 @@ public class MusicSyncActivity extends BaseACA {
     static YouTube youtube;
     static final String KEY
             = "AIzaSyA6BiT3OVlEvKqTvHL9slfPqYucIksgQuw";
+    String folder_name = "youtube_music";
+    String tn_folder_name = "youtube_thumbnails";
     YouTube.Videos.List query;
     String packageName;
-
+    ArrayList<String> filenames_arr = new ArrayList<>();
+    ArrayList<String> tn_filenames_arr = new ArrayList<>();
+//    Map<String, Integer> vidid_index_map = new HashMap<>();
     Button button_sync;
     Button button_back;
     TextView label_status;
@@ -95,6 +102,20 @@ public class MusicSyncActivity extends BaseACA {
         realm = Realm.getDefaultInstance();
 
         sync_in_progress = false;
+
+        // Set up Filename String ArrayList
+        String path = getFilesDir().toString() + File.separator + folder_name;
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            filenames_arr.add(files[i].getName());
+        }
+        path = getFilesDir().toString() + File.separator + tn_folder_name;
+        directory = new File(path);
+        File[] tn_files = directory.listFiles();
+        for (int i = 0; i < tn_files.length; i++) {
+            tn_filenames_arr.add(getNameFromFileName(tn_files[i].getName()));
+        }
 
         // Find view ids
         button_sync = (Button) findViewById(R.id.button_sync);
@@ -180,10 +201,11 @@ public class MusicSyncActivity extends BaseACA {
                 realm.delete(YTDownloads.class);
             }
         });
-
+        Log.d("JSON", jsonArray.toString());
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject oneObject = jsonArray.getJSONObject(i);
+                Log.d("JSON "+i, oneObject.toString());
                 // Pulling items from the array
                 final String video_title = oneObject.getString("video_title");
                 final String video_id = oneObject.getString("video_id");
@@ -291,13 +313,15 @@ public class MusicSyncActivity extends BaseACA {
             InputStream input = null;
             OutputStream output = null;
             HttpURLConnection connection = null;
-            String folder_name = "youtube_music";
             int fileLength;
             int download_count = 0;
             for (URL url : urls) { // Download the song files from the Ubuntu Server
                 try {
                     String urlString = url.getFile();
                     String filename = urlString.substring( urlString.lastIndexOf('/')+1, urlString.length() );
+                    if (filenames_arr.contains(filename)) {
+                        continue;
+                    }
 
                     connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
@@ -346,15 +370,18 @@ public class MusicSyncActivity extends BaseACA {
                                 output.write(data, 0, count);
                                 download_count++;
                             } catch (Exception e) {
-                                Log.d("DOWNLOAD EXCEPTION", e.toString());
+                                Log.d("DOWNLOAD EXCEPTION 1", e.toString());
                                 throw e;
                             }
                         }
                     } else {
-                        Log.d("DOWNLOAD ALREADY EXISTS", filename);
+                        // if file already exists, delete the file from the filenames_arr
+                        Log.d("REMOVE", filename);
+                        filenames_arr.remove(filename);
+//                        Log.d("DOWNLOAD ALREADY EXISTS", filename);
                     }
                 } catch (Exception e) {
-                    Log.d("DOWNLOAD EXCEPTION", e.toString());
+                    Log.d("DOWNLOAD EXCEPTION 2", e.toString());
                     return e.toString();
                 } finally {
                     try {
@@ -380,6 +407,11 @@ public class MusicSyncActivity extends BaseACA {
             // Download the image thumbnails for the song files
             for (String videoId : videoIds) {
                 try {
+                    // First check videoId already in thumbnails photos folder first
+                    if (tn_filenames_arr.contains(videoId)) {
+                        continue; // skipping the whole download thumbnail process for this videoId
+                    }
+
                     // This object is used to make YouTube Data API requests. The last
                     // argument is required, but since we don't need anything
                     // initialized when the HttpRequest is initialized, we override
@@ -397,6 +429,11 @@ public class MusicSyncActivity extends BaseACA {
                     query.setId(videoId);
 
                     VideoListResponse response = query.execute();
+//                    Log.d("VIDEO ID", videoId);
+//                    Log.d("YOUTUBE RESPONSE", response.getItems().toString());
+                    if (response.getItems().size() == 0) { // If the video is removed or do not exist on youtube anymore
+                        continue;
+                    }
                     String thumbnailUrl = response.getItems().get(0).getSnippet().getThumbnails().getMedium().getUrl();
                     URL url = new URL(thumbnailUrl);
 
@@ -423,18 +460,18 @@ public class MusicSyncActivity extends BaseACA {
 
                     // download the file
                     input = connection.getInputStream();
-                    File f = new File(getFilesDir(), folder_name);
+                    File f = new File(getFilesDir(), tn_folder_name);
                     if (!f.exists()) {
                         if (!f.mkdirs()) {
                             Log.d("MKDIR FAILURE", f.toString());
                         }
                     }
-                    Log.d("FILE PATH:", getFilesDir() + File.separator + folder_name + File.separator + filename);
+//                    Log.d("FILE PATH:", getFilesDir() + File.separator + folder_name + File.separator + filename);
 
                     // check if the file already exists
-                    File file = new File(getFilesDir() + File.separator + folder_name, filename);
+                    File file = new File(getFilesDir() + File.separator + tn_folder_name, filename);
                     if (!file.exists()) {
-                        output = new FileOutputStream(getFilesDir() + File.separator + folder_name + File.separator + filename);
+                        output = new FileOutputStream(getFilesDir() + File.separator + tn_folder_name + File.separator + filename);
 
                         byte data[] = new byte[4096];
                         long total = 0;
@@ -453,16 +490,17 @@ public class MusicSyncActivity extends BaseACA {
                                 output.write(data, 0, count);
                                 download_count++;
                             } catch (Exception e) {
-                                Log.d("DOWNLOAD EXCEPTION", e.toString());
+                                Log.d("DOWNLOAD EXCEPTION 3", e.toString());
                                 throw e;
                             }
                         }
                     } else {
-                        Log.d("DOWNLOAD ALREADY EXISTS", filename);
+//                        Log.d("DOWNLOAD ALREADY EXISTS", filename);
                     }
 
                 } catch (Exception e) {
-                    Log.d("DOWNLOAD EXCEPTION", e.toString());
+                    Log.d("DOWNLOAD EXCEPTION 4", e.toString());
+                    e.printStackTrace();
                     return e.toString();
                 } finally {
                     try {
@@ -479,6 +517,23 @@ public class MusicSyncActivity extends BaseACA {
                 }
             }
 
+            // Delete ubuntu removed download at this device
+            try {
+                for (String thefile : filenames_arr) {
+                    File file_tbd = new File(getFilesDir() + File.separator + folder_name + File.separator + thefile);
+                    if (file_tbd.exists()) {
+                        Boolean isDeleted = file_tbd.delete();
+                        Log.d("File Deletion", isDeleted.toString());
+                    } else {
+                        Log.d("File Deletion", "File does not exist: "+getFilesDir() + File.separator + folder_name + File.separator + thefile);
+                    }
+                }
+                filenames_arr.clear();
+            } catch (Exception e) {
+                Log.d("File cannot be deleted", e.toString());
+                e.printStackTrace();
+            }
+
             return "Downloaded: "+download_count;
         }
 
@@ -488,6 +543,7 @@ public class MusicSyncActivity extends BaseACA {
 
         protected void onPostExecute(String result) {
             //this method will be running on UI thread
+            Log.d("WHATS LEFT", filenames_arr.toString());
             stopButtonRotation();
             sync_in_progress = false;
             updateStatusLabel("Music Sync is complete. "+result);

@@ -189,9 +189,10 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
     }
 
     public String getTitleFromVidId(String vidId) {
-//        Log.d("ABC", vidId);
+        Log.d("VIDID", vidId);
         RealmQuery<YTDownloads> query = realm.where(YTDownloads.class);
         YTDownloads vid = query.equalTo("video_id", vidId).findFirst();
+        Log.d("VID OBJ", vid.toString());
         return vid.getVideo_title();
     }
 

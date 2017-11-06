@@ -13,6 +13,9 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -34,6 +37,12 @@ public class BaseACA extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Realm.init(this);
         realm = Realm.getDefaultInstance();
+
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build());
         super.onCreate(savedInstanceState);
     }
 

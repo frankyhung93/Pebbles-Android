@@ -296,6 +296,7 @@ public class Challenges extends RealmObject {
                 clg.setTime_limit(1);
                 clg.setDeadline(end_date);
             } else {
+                clg.setDeadline(null);
                 clg.setTime_limit(0);
             }
             switch (rwd_arr.get(0)) { // reward type

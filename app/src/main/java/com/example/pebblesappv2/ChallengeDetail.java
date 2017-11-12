@@ -107,7 +107,7 @@ public class ChallengeDetail extends BaseACA {
         action_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (challenge.getStatus() == Challenges.pending) {
+                if (challenge.getStatus() == Challenges.pending || challenge.getStatus() == Challenges.failed) {
                     editform.show();
                 } else if (challenge.getStatus() ==  Challenges.in_progress) {
                     new AlertDialog.Builder(ChallengeDetail.this)
@@ -453,7 +453,7 @@ public class ChallengeDetail extends BaseACA {
             case Challenges.failed:
                 iv_status.setImageDrawable(getDrawable(R.drawable.fail));
                 tv_status.setText("Failed");
-                action_btn.setVisibility(View.GONE);
+                action_btn.setText("Edit");
                 break;
         }
         tv_description.setText(challenge.getCha_desc());

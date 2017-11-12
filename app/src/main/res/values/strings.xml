@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pebbles App v2</string>
+    <string name="app_name">Pebbles</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -25,6 +25,23 @@
         <item>Listed</item>
         <item>Gold</item>
         <item>Diamond</item>
+    </string-array>
+    <string-array name="rb_array">
+        <item>rb01</item>
+        <item>rb02</item>
+        <item>rb03</item>
+        <item>rb04</item>
+        <item>rb05</item>
+        <item>rb06</item>
+        <item>rb07</item>
+        <item>rb08</item>
+        <item>rb09</item>
+        <item>rb10</item>
+        <item>rb11</item>
+        <item>rb12</item>
+        <item>rb13</item>
+        <item>rb14</item>
+        <item>rb15</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

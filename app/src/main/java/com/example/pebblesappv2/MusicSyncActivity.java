@@ -106,12 +106,18 @@ public class MusicSyncActivity extends BaseACA {
         // Set up Filename String ArrayList
         String path = getFilesDir().toString() + File.separator + folder_name;
         File directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
         File[] files = directory.listFiles();
         for (int i = 0; i < files.length; i++) {
             filenames_arr.add(files[i].getName());
         }
         path = getFilesDir().toString() + File.separator + tn_folder_name;
         directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
         File[] tn_files = directory.listFiles();
         for (int i = 0; i < tn_files.length; i++) {
             tn_filenames_arr.add(getNameFromFileName(tn_files[i].getName()));

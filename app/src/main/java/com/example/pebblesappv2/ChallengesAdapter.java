@@ -1,11 +1,17 @@
 package com.example.pebblesappv2;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,6 +57,22 @@ public class ChallengesAdapter extends RecyclerView.Adapter<ChallengesAdapter.Vi
                 break;
         }
         viewHolder.challenge_status.setImageDrawable(status_drawable);
+
+        runEnterAnimation(viewHolder.itemView, i);
+    }
+
+    private void runEnterAnimation(View view, int order) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        view.setTranslationX(-size.x);
+
+        ObjectAnimator transAnim = ObjectAnimator.ofFloat(view, "translationX", 0);
+        transAnim.setInterpolator(new DecelerateInterpolator(2.5f));
+        transAnim.setDuration(700);
+        transAnim.setStartDelay(order*100);
+        transAnim.start();
     }
 
     @Override

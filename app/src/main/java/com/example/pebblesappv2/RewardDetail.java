@@ -195,14 +195,14 @@ public class RewardDetail extends BaseACA {
             case Rewards.targeted:
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.target));
                 redeemBtn.setVisibility(View.GONE);
-                editBtn.setVisibility(View.GONE);
+//                editBtn.setVisibility(View.GONE);
                 buyBtn.setVisibility(View.GONE);
                 delBtn.setVisibility(View.GONE);
                 end_breaker.setVisibility(View.GONE);
                 break;
             case Rewards.redeemable:
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.moneybag));
-                editBtn.setVisibility(View.GONE);
+//                editBtn.setVisibility(View.GONE);
                 buyBtn.setVisibility(View.GONE);
                 delBtn.setVisibility(View.GONE);
                 end_breaker.setVisibility(View.GONE);

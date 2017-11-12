@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -19,11 +20,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import io.realm.Realm;
 
@@ -32,6 +36,7 @@ public class MainActivity extends BaseACA
 
     public final static String EXTRA_MESSAGE = "msg_one";
     public final String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    private int rb_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +53,25 @@ public class MainActivity extends BaseACA
 
         TextView tv_mag_gold = (TextView) findViewById(R.id.tv_mag_gold);
         TextView tv_mag_diamond = (TextView) findViewById(R.id.tv_mag_diamond);
+        ImageView rockbalance = (ImageView) findViewById(R.id.rock_balance);
         tv_mag_gold.setText(MagCurrency.getGold(realm)+"");
         tv_mag_diamond.setText(MagCurrency.getDiamond(realm)+"");
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String currentDate = settings.getString("rbDate", "1970-01-01");
+        rb_index = settings.getInt("rb_index", 0);
+        String[] rb_array = getResources().getStringArray(R.array.rb_array);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if (!currentDate.equals(format.format(new Date()))) {
+            Random rand = new Random();
+            rb_index = rand.nextInt(rb_array.length);
+
+            SharedPreferences.Editor edit = settings.edit();
+            edit.putString("rbDate", format.format(new Date()));
+            edit.putInt("rb_index", rb_index);
+            edit.apply();
+        }
+        rockbalance.setImageResource(getResources().getIdentifier(rb_array[rb_index], "drawable", this.getPackageName()));
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

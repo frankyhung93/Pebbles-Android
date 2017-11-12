@@ -32,6 +32,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class ChallengesList extends BaseACA {
     ArrayList<Challenges> challenges = new ArrayList<>();
@@ -93,10 +94,11 @@ public class ChallengesList extends BaseACA {
         recyclerView.setLayoutManager(layoutManager);
 
         RealmQuery<Challenges> query = realm.where(Challenges.class);
-        RealmResults<Challenges> challenges_rs = query.findAll();
+        RealmResults<Challenges> challenges_rs = query.findAll().sort("deadline", Sort.ASCENDING);
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);
         }
+//        Log.d("SORTed", challenges.toString());
         RealmQuery<Rewards> query_rwd = realm.where(Rewards.class).equalTo("status", Rewards.pending);
         RealmResults<Rewards> rwds_rs = query_rwd.findAll();
         for (Rewards rwd : rwds_rs) {
@@ -368,7 +370,7 @@ public class ChallengesList extends BaseACA {
     private void renewList() {
         challenges.clear();
         RealmQuery<Challenges> query = realm.where(Challenges.class);
-        RealmResults<Challenges> challenges_rs = query.findAll();
+        RealmResults<Challenges> challenges_rs = query.findAll().sort("deadline", Sort.ASCENDING);
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);
             Log.d("REWARD_DETAIL", challenge.toString());

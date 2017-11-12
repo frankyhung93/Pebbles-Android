@@ -41,6 +41,7 @@ public class ChallengesAdapter extends RecyclerView.Adapter<ChallengesAdapter.Vi
     public void onBindViewHolder(ChallengesAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.challenge_name.setText(challenges.get(i).getCha_name());
+        viewHolder.challenge_endsin.setText("Ends in: " + challenges.get(i).findChallengeEndsIn());
         Drawable status_drawable = null;
         switch (challenges.get(i).getStatus()) {
             case Challenges.pending:
@@ -82,11 +83,13 @@ public class ChallengesAdapter extends RecyclerView.Adapter<ChallengesAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView challenge_name;
+        private TextView challenge_endsin;
         private ImageView challenge_status;
         public ViewHolder(View view) {
             super(view);
 
             challenge_name = (TextView)view.findViewById(R.id.challenge_name);
+            challenge_endsin = (TextView)view.findViewById(R.id.endsin);
             challenge_status = (ImageView)view.findViewById(R.id.challenge_status);
         }
     }

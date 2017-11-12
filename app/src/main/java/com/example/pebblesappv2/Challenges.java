@@ -58,10 +58,26 @@ public class Challenges extends RealmObject {
         return id;
     }
 
+    public static Challenges getChallengeByRwd(Realm rm, Rewards rwd) {
+        RealmQuery<Challenges> query = rm.where(Challenges.class).equalTo("linked_rwd.id", rwd.getId());
+        return query.findFirst();
+    }
+
     public static Challenges getChallengeById(Realm rm, int id) {
         RealmQuery<Challenges> query = rm.where(Challenges.class).equalTo("id", id);
         Challenges clg = query.findFirst();
         return clg;
+    }
+
+    public String findChallengeEndsIn() {
+        if (this.getDeadline() != null) {
+            Date now = new Date();
+            long timediff = this.getDeadline().getTime() - now.getTime();
+            int indays = Math.abs((int) Math.ceil((double)timediff/(86400 * 1000))) + 1;
+            return indays+ " Day";
+        } else {
+            return "Forever";
+        }
     }
 
     public static ArrayList<Challenges> returnAllPendingProgressingChallenges(Realm rm) {

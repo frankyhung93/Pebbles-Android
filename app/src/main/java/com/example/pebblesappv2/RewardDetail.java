@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.InputStream;
@@ -199,6 +200,9 @@ public class RewardDetail extends BaseACA {
                 buyBtn.setVisibility(View.GONE);
                 delBtn.setVisibility(View.GONE);
                 end_breaker.setVisibility(View.GONE);
+
+                // Toast which challenge targets this reward
+                Toast.makeText(this, "targeted by: "+Challenges.getChallengeByRwd(realm, rwd).getCha_name(), Toast.LENGTH_SHORT).show();
                 break;
             case Rewards.redeemable:
                 fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.moneybag));

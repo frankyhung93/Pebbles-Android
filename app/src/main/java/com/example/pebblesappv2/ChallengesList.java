@@ -30,6 +30,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -93,7 +96,12 @@ public class ChallengesList extends BaseACA {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        RealmQuery<Challenges> query = realm.where(Challenges.class);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date tuned_date = cal.getTime();
+        Log.d("Tuned Time", tuned_date.toString());
+
+        RealmQuery<Challenges> query = realm.where(Challenges.class).greaterThan("deadline", tuned_date).or().isNull("deadline");
         RealmResults<Challenges> challenges_rs = query.findAll().sort("deadline", Sort.ASCENDING);
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);
@@ -369,7 +377,13 @@ public class ChallengesList extends BaseACA {
 
     private void renewList() {
         challenges.clear();
-        RealmQuery<Challenges> query = realm.where(Challenges.class);
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date tuned_date = cal.getTime();
+        Log.d("Tuned Time", tuned_date.toString());
+
+        RealmQuery<Challenges> query = realm.where(Challenges.class).greaterThan("deadline", tuned_date).or().isNull("deadline");
         RealmResults<Challenges> challenges_rs = query.findAll().sort("deadline", Sort.ASCENDING);
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);

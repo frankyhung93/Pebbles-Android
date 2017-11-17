@@ -333,7 +333,10 @@ public class Challenges extends RealmObject {
                     break;
             }
 
+            // Do not bring forward current progress counter as steps might be different
+            // Manually score it back to the same progress if steps are actually unchanged
             clg.setCurr_counter(0);
+
             switch (challenge_arr.get(0)) { // challenge type
                 case "Single":
                     clg.setType(type_simple);

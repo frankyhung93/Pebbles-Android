@@ -101,7 +101,7 @@ public class ChallengesList extends BaseACA {
         Date tuned_date = cal.getTime();
         Log.d("Tuned Time", tuned_date.toString());
 
-        RealmQuery<Challenges> query = realm.where(Challenges.class).greaterThan("deadline", tuned_date).or().isNull("deadline");
+        RealmQuery<Challenges> query = realm.where(Challenges.class).equalTo("status", Challenges.failed).or().beginGroup().greaterThan("deadline", tuned_date).or().isNull("deadline").endGroup();
         RealmResults<Challenges> challenges_rs = query.findAll().sort("deadline", Sort.ASCENDING);
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);
@@ -383,7 +383,7 @@ public class ChallengesList extends BaseACA {
         Date tuned_date = cal.getTime();
         Log.d("Tuned Time", tuned_date.toString());
 
-        RealmQuery<Challenges> query = realm.where(Challenges.class).greaterThan("deadline", tuned_date).or().isNull("deadline");
+        RealmQuery<Challenges> query = realm.where(Challenges.class).equalTo("status", Challenges.failed).or().beginGroup().greaterThan("deadline", tuned_date).or().isNull("deadline").endGroup();
         RealmResults<Challenges> challenges_rs = query.findAll().sort("deadline", Sort.ASCENDING);
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);

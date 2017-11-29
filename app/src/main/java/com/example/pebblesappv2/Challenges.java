@@ -53,6 +53,8 @@ public class Challenges extends RealmObject {
     private static boolean updateRwdFlag = false;
     @Ignore
     private static boolean updatePrizeFlag = false;
+    @Ignore
+    private static boolean failFlag = false;
 
     public int getId() {
         return id;
@@ -73,7 +75,10 @@ public class Challenges extends RealmObject {
         if (this.getDeadline() != null) {
             Date now = new Date();
             long timediff = this.getDeadline().getTime() - now.getTime();
-            int indays = Math.abs((int) Math.ceil((double)timediff/(86400 * 1000))) + 1;
+            int indays = 0;
+            if (timediff > -86400000L) {
+                indays = Math.abs((int) Math.ceil((double) timediff / (86400 * 1000))) + 1;
+            }
             return indays+ " Day";
         } else {
             return "Forever";
@@ -133,6 +138,10 @@ public class Challenges extends RealmObject {
                             updateRwdFlag = true;
                             updatePrizeFlag = true;
                         }
+                        if (failFlag) {
+                            cha.setStatus(failed);
+                            updateRwdFlag = true;
+                        }
                     }
                     if (cha.getTime_limit() == 1 && (new Date(cha.getDeadline().getTime() + (1000 * 60 * 60 * 24))).getTime() < now) { // already expired
                         cha.setStatus(failed);
@@ -183,6 +192,16 @@ public class Challenges extends RealmObject {
             updateChallengeStatus(rm, challenge.getId());
         } catch (Exception e) {
             Log.d("CUMON SCORE CHALLENGE", e.toString());
+        }
+    }
+
+    public static void failThisChallenge(Realm rm, Challenges challenge) {
+        try {
+            failFlag = true;
+            updateChallengeStatus(rm, challenge.getId());
+            failFlag = false;
+        } catch (Exception e) {
+            Log.d("CUMON FAIL CHALLENGE", e.toString());
         }
     }
 

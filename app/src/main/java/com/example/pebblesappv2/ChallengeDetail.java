@@ -49,6 +49,7 @@ public class ChallengeDetail extends BaseACA {
     TextView tv_reward;
     LinearLayout steps_ll;
     Button action_btn;
+    Button fail_btn;
 
     // Edit Form needed variables
     ArrayList<String> avail_rwds = new ArrayList<>();
@@ -98,6 +99,7 @@ public class ChallengeDetail extends BaseACA {
         tv_reward = (TextView) findViewById(R.id.challenge_reward);
         steps_ll = (LinearLayout) findViewById(R.id.steps_ll);
         action_btn = (Button) findViewById(R.id.action_btn);
+        fail_btn = (Button) findViewById(R.id.fail_btn);
 
         fillUIData();
 
@@ -126,6 +128,24 @@ public class ChallengeDetail extends BaseACA {
                 } else {
                     // do nothing
                 }
+            }
+        });
+        fail_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(ChallengeDetail.this)
+                        .setTitle("Fail Operation")
+                        .setMessage("Are you really sure you failed this?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Challenges.failThisChallenge(realm, challenge);
+                                dialog.cancel();
+                                renewUI();
+                            }})
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }}).show();
             }
         });
     }
@@ -438,6 +458,7 @@ public class ChallengeDetail extends BaseACA {
                 iv_status.setImageDrawable(getDrawable(R.drawable.pending));
                 tv_status.setText("Pending");
                 action_btn.setText("Edit");
+                fail_btn.setVisibility(View.GONE);
                 break;
             case Challenges.in_progress:
                 iv_status.setImageDrawable(getDrawable(R.drawable.progress));
@@ -449,11 +470,13 @@ public class ChallengeDetail extends BaseACA {
                 tv_status.setText("Completed");
                 Log.d("RENEW UI", "action button should then disappear");
                 action_btn.setVisibility(View.GONE);
+                fail_btn.setVisibility(View.GONE);
                 break;
             case Challenges.failed:
                 iv_status.setImageDrawable(getDrawable(R.drawable.fail));
                 tv_status.setText("Failed");
                 action_btn.setText("Edit");
+                fail_btn.setVisibility(View.GONE);
                 break;
         }
         tv_description.setText(challenge.getCha_desc());

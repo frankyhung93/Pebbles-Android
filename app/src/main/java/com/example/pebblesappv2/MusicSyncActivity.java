@@ -103,26 +103,6 @@ public class MusicSyncActivity extends BaseACA {
 
         sync_in_progress = false;
 
-        // Set up Filename String ArrayList
-        String path = getFilesDir().toString() + File.separator + folder_name;
-        File directory = new File(path);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        File[] files = directory.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            filenames_arr.add(files[i].getName());
-        }
-        path = getFilesDir().toString() + File.separator + tn_folder_name;
-        directory = new File(path);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        File[] tn_files = directory.listFiles();
-        for (int i = 0; i < tn_files.length; i++) {
-            tn_filenames_arr.add(getNameFromFileName(tn_files[i].getName()));
-        }
-
         // Find view ids
         button_sync = (Button) findViewById(R.id.button_sync);
         button_back = (Button) findViewById(R.id.button_back);
@@ -313,6 +293,25 @@ public class MusicSyncActivity extends BaseACA {
         }
 
         protected String doInBackground(URL[] urls) {
+            // Set up Filename String ArrayList
+            String path = getFilesDir().toString() + File.separator + folder_name;
+            File directory = new File(path);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            File[] files = directory.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                filenames_arr.add(files[i].getName());
+            }
+            path = getFilesDir().toString() + File.separator + tn_folder_name;
+            directory = new File(path);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            File[] tn_files = directory.listFiles();
+            for (int i = 0; i < tn_files.length; i++) {
+                tn_filenames_arr.add(getNameFromFileName(tn_files[i].getName()));
+            }
 
             //this method will be running on background thread so don't update UI from here
             //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
@@ -326,6 +325,8 @@ public class MusicSyncActivity extends BaseACA {
                     String urlString = url.getFile();
                     String filename = urlString.substring( urlString.lastIndexOf('/')+1, urlString.length() );
                     if (filenames_arr.contains(filename)) {
+                        Log.d("REMOVE", filename);
+                        filenames_arr.remove(filename);
                         continue;
                     }
 
@@ -409,12 +410,14 @@ public class MusicSyncActivity extends BaseACA {
             output = null;
             connection = null;
             download_count = 0;
-            folder_name = "youtube_thumbnails";
+//            tn_folder_name = "youtube_thumbnails";
             // Download the image thumbnails for the song files
             for (String videoId : videoIds) {
                 try {
                     // First check videoId already in thumbnails photos folder first
                     if (tn_filenames_arr.contains(videoId)) {
+                        Log.d("REMOVE", videoId);
+                        tn_filenames_arr.remove(videoId);
                         continue; // skipping the whole download thumbnail process for this videoId
                     }
 
@@ -502,6 +505,8 @@ public class MusicSyncActivity extends BaseACA {
                         }
                     } else {
 //                        Log.d("DOWNLOAD ALREADY EXISTS", filename);
+                        Log.d("REMOVE", videoId);
+                        tn_filenames_arr.remove(videoId);
                     }
 
                 } catch (Exception e) {
@@ -535,6 +540,17 @@ public class MusicSyncActivity extends BaseACA {
                     }
                 }
                 filenames_arr.clear();
+                // To-do for thumbnails deletion
+//                for (String thefile : tn_filenames_arr) {
+//                    File file_tbd = new File(getFilesDir() + File.separator + tn_folder_name + File.separator + thefile);
+//                    if (file_tbd.exists()) {
+//                        Boolean isDeleted = file_tbd.delete();
+//                        Log.d("Thumbnail Deletion", isDeleted.toString());
+//                    } else {
+//                        Log.d("Thumbnail Deletion", "TN does not exist: "+getFilesDir() + File.separator + tn_folder_name + File.separator + thefile);
+//                    }
+//                }
+                tn_filenames_arr.clear();
             } catch (Exception e) {
                 Log.d("File cannot be deleted", e.toString());
                 e.printStackTrace();
@@ -550,6 +566,7 @@ public class MusicSyncActivity extends BaseACA {
         protected void onPostExecute(String result) {
             //this method will be running on UI thread
             Log.d("WHATS LEFT", filenames_arr.toString());
+            Log.d("WHATS LEFT", tn_filenames_arr.toString());
             stopButtonRotation();
             sync_in_progress = false;
             updateStatusLabel("Music Sync is complete. "+result);

@@ -127,6 +127,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         File directory = new File(path);
         File[] files = directory.listFiles();
         for (int i = 0; i < files.length; i++) {
+            Log.d("Filename", files[i].getName());
             String part_name = getNameFromFileName(files[i].getName());
             String part_ext = getExtFromFileName(files[i].getName());
             vid_ext_map.put(part_name, part_ext);

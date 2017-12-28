@@ -1,8 +1,16 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="?android:colorControlHighlight">
-    <item>
+    <item
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp"
+        android:bottom="1dp">
         <shape android:shape="oval">
+            <!--Color does not matter here as this background only exists for making the elevation attribute work in making shadows-->
             <solid android:color="?android:colorAccent" />
+            <size
+                android:height="78dp"
+                android:width="78dp" />
         </shape>
     </item>
 </ripple>

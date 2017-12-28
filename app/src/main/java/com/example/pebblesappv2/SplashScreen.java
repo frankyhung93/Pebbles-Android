@@ -23,13 +23,6 @@ public class SplashScreen extends AppCompatActivity {
                         .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
                         .build());
 
-        Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder()
-                .schemaVersion(3) // Must be bumped when the schema changes
-                .migration(new MyMigration()) // Migration to run
-                .build();
-        Realm.setDefaultConfiguration(config);
-
         // Move on the MainActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

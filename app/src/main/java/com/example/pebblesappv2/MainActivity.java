@@ -2,6 +2,7 @@ package com.example.pebblesappv2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,8 +45,45 @@ public class MainActivity extends BaseACA
         TextView tv_mag_gold = (TextView) findViewById(R.id.tv_mag_gold);
         TextView tv_mag_diamond = (TextView) findViewById(R.id.tv_mag_diamond);
         ImageView rockbalance = (ImageView) findViewById(R.id.rock_balance);
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/vintage.ttf");
+        tv_mag_gold.setTypeface(custom_font);
+        tv_mag_diamond.setTypeface(custom_font);
         tv_mag_gold.setText(MagCurrency.getGold(realm)+"");
         tv_mag_diamond.setText(MagCurrency.getDiamond(realm)+"");
+
+        ImageView sc_journal = (ImageView) findViewById(R.id.shortcut_journal);
+        ImageView sc_rewards = (ImageView) findViewById(R.id.shortcut_rewards);
+        ImageView sc_challenges = (ImageView) findViewById(R.id.shortcut_challenges);
+        ImageView sc_tunes = (ImageView) findViewById(R.id.shortcut_tunes);
+
+        sc_journal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TdlActivity.class);
+                startActivity(intent);
+            }
+        });
+        sc_rewards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RewardsList.class);
+                startActivity(intent);
+            }
+        });
+        sc_challenges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChallengesList.class);
+                startActivity(intent);
+            }
+        });
+        sc_tunes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MusicDashBoard.class);
+                startActivity(intent);
+            }
+        });
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String currentDate = settings.getString("rbDate", "1970-01-01");

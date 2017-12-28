@@ -2,9 +2,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
     <item android:drawable="@color/colorBisque"/>
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/pb_icon_big"/>
+    <item
+        android:width="200dp"
+        android:height="200dp"
+        android:gravity="center"
+        android:drawable="@drawable/pb_icon_big">
     </item>
 </layer-list>

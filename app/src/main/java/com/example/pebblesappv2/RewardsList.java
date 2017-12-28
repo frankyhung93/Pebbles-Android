@@ -18,13 +18,17 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -36,6 +40,7 @@ public class RewardsList extends BaseACA {
     RecyclerView.Adapter adapter = null;
     ImageButton choosePhoto = null;
     Bitmap bit_cover_photo = null;
+    Spinner listing_spinner;
     private static final int SELECT_PICTURE = 10;
 
     @Override
@@ -174,6 +179,41 @@ public class RewardsList extends BaseACA {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
+            }
+        });
+
+        listing_spinner = (Spinner) findViewById(R.id.rewards_list_spinner);
+        listing_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                rewards.clear();
+                RealmQuery<Rewards> query = realm.where(Rewards.class);
+                RealmResults<Rewards> rewards_rs;
+                switch (parent.getItemAtPosition(position).toString()) {
+                    case "All":
+                        rewards_rs = query.findAll();
+                        break;
+                    case "Pending/Targeted":
+                        Integer[] pendingtargeted = {Rewards.pending, Rewards.targeted};
+                        rewards_rs = query.in("status", pendingtargeted).findAll();
+                        break;
+                    case "Redeemable/Redeemed":
+                        Integer[] redeem = {Rewards.redeemable, Rewards.redeemed};
+                        rewards_rs = query.in("status", redeem).findAll();
+                        break;
+                    default:
+                        rewards_rs = query.findAll();
+                        break;
+                }
+                for (Rewards reward : rewards_rs) {
+                    rewards.add(reward);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

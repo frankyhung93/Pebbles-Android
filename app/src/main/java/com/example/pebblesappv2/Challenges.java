@@ -7,6 +7,7 @@ import java.nio.channels.Channel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
@@ -48,6 +49,8 @@ public class Challenges extends RealmObject {
     private int cha_prize_gold;
     private int cha_prize_diamond;
     private int status;
+    private int is_recurrent;
+    private int recurrent_period;
 
     @Ignore
     private static boolean updateRwdFlag = false;
@@ -71,6 +74,23 @@ public class Challenges extends RealmObject {
         return clg;
     }
 
+    public boolean deleteChallenge(Realm rm, final int id) {
+        try {
+            rm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmQuery<Challenges> query = realm.where(Challenges.class).equalTo("id", id);
+                    Challenges clg = query.findFirst();
+                    clg.deleteFromRealm();
+                }
+            });
+            return true;
+        } catch (Exception e) {
+            Log.d("CUMON DELETE CHALLENGE", e.toString());
+            return false;
+        }
+    }
+
     public String findChallengeEndsIn() {
         if (this.getDeadline() != null) {
             Date now = new Date();
@@ -85,10 +105,10 @@ public class Challenges extends RealmObject {
         }
     }
 
-    public static ArrayList<Challenges> returnAllPendingProgressingChallenges(Realm rm) {
+    public static ArrayList<Challenges> returnAllPendingProgressingRecurrentChallenges(Realm rm) {
         ArrayList<Challenges> chas = new ArrayList<>();
         Integer[] stillOKstatus = {pending, in_progress};
-        RealmQuery<Challenges> query = rm.where(Challenges.class).in("status", stillOKstatus);
+        RealmQuery<Challenges> query = rm.where(Challenges.class).in("status", stillOKstatus).or().equalTo("is_recurrent", 1);
         RealmResults<Challenges> rs = query.findAll();
         for (Challenges chal : rs) {
             chas.add(chal);
@@ -123,7 +143,7 @@ public class Challenges extends RealmObject {
                 public void execute(Realm realm) {
                 Challenges cha = getChallengeById(realm, challenge_id);
                 Long now = System.currentTimeMillis();
-
+                Log.d("BEFORE_UPDATE", "Status: "+cha.getStatus()+", Name: "+cha.getCha_name()+", ");
                 if (cha.getStatus() == pending) {
                     if (cha.getStart_date().getTime() <= now && (cha.getTime_limit() == 0 || (new Date(cha.getDeadline().getTime() + (1000 * 60 * 60 * 24))).getTime() >= now)) {
                         cha.setStatus(in_progress);
@@ -131,9 +151,9 @@ public class Challenges extends RealmObject {
                     }
                 }
 
-                if (cha.getStatus() == in_progress) {
+                if (cha.getStatus() == in_progress || cha.getIs_recurrent() == 1) {
                     if (cha.getStart_date().getTime() <= now && (cha.getTime_limit() == 0 || (new Date(cha.getDeadline().getTime() + (1000 * 60 * 60 * 24))).getTime() >= now)) { // within timeframe
-                        if (cha.getMax_counter() == cha.getCurr_counter()) {
+                        if (cha.getMax_counter() == cha.getCurr_counter() && cha.getStatus() == in_progress) {
                             cha.setStatus(completed);
                             updateRwdFlag = true;
                             updatePrizeFlag = true;
@@ -143,8 +163,34 @@ public class Challenges extends RealmObject {
                             updateRwdFlag = true;
                         }
                     }
-                    if (cha.getTime_limit() == 1 && (new Date(cha.getDeadline().getTime() + (1000 * 60 * 60 * 24))).getTime() < now) { // already expired
-                        cha.setStatus(failed);
+                    if (cha.getDeadline() != null && (new Date(cha.getDeadline().getTime() + (1000 * 60 * 60 * 24))).getTime() < now) { // already expired
+                        if (cha.getIs_recurrent() == 1) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set(Calendar.HOUR_OF_DAY, 0);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                            cha.setStart_date(calendar.getTime());
+                            calendar.add(Calendar.DATE, cha.getRecurrent_period() - 1);
+                            cha.setDeadline(calendar.getTime());
+                            cha.setStatus(in_progress);
+                            // Reset challenge progress also
+                            switch (cha.getType()) {
+                                case type_simple:
+                                case type_counter:
+                                    cha.setCurr_counter(0);
+                                    break;
+                                case type_steps:
+                                    ArrayList<Challenge_steps> steps = Challenge_steps.findStepsByChallenge(realm, cha);
+                                    for (int i = 0; i < steps.size(); i++) {
+                                        steps.get(i).setStatus(Challenge_steps.notyet);
+                                    }
+                                    cha.setCurr_counter(0);
+                                    break;
+                            }
+                        } else if (cha.getTime_limit() == 1) {
+                            cha.setStatus(failed);
+                        }
                         updateRwdFlag = true;
                     }
                 }
@@ -207,6 +253,7 @@ public class Challenges extends RealmObject {
 
     public static int addChallenge(Realm rm, ArrayList<String> str_arr, ArrayList<String> rwd_arr, ArrayList<String> challenge_arr) {
         try {
+            Log.d("FUCKING", str_arr.toString());
             rm.beginTransaction();
             int challenge_id;
             boolean have_steps = false;
@@ -227,7 +274,7 @@ public class Challenges extends RealmObject {
                 e.printStackTrace();
             }
             clg.setStart_date(start_date);
-            if (str_arr.size() > 3) { // have deadline
+            if (!str_arr.get(3).equals("")) { // have deadline
                 try {
                     end_date = format.parse(str_arr.get(3));
                 } catch (ParseException e) {
@@ -236,7 +283,25 @@ public class Challenges extends RealmObject {
                 clg.setTime_limit(1);
                 clg.setDeadline(end_date);
             } else {
+                clg.setDeadline(null);
                 clg.setTime_limit(0);
+            }
+            if (!str_arr.get(4).equals("")) { // have recurrent_period
+                int period = Integer.parseInt(str_arr.get(4));
+                clg.setRecurrent_period(period);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(start_date);
+                calendar.add(Calendar.DATE, period - 1);
+                clg.setDeadline(calendar.getTime());
+                clg.setIs_recurrent(1);
+            } else if (str_arr.get(3).equals("")) {
+                clg.setDeadline(null);
+                clg.setTime_limit(0);
+                clg.setRecurrent_period(0);
+                clg.setIs_recurrent(0);
+            } else {
+                clg.setRecurrent_period(0);
+                clg.setIs_recurrent(0);
             }
             switch (rwd_arr.get(0)) { // reward type
                 case "Listed":
@@ -275,6 +340,7 @@ public class Challenges extends RealmObject {
                     }
                     break;
             }
+
             clg.setStatus(pending);
             rm.commitTransaction();
 
@@ -322,7 +388,7 @@ public class Challenges extends RealmObject {
                 e.printStackTrace();
             }
             clg.setStart_date(start_date);
-            if (str_arr.size() > 3) { // have deadline
+            if (!str_arr.get(3).equals("")) { // have deadline
                 try {
                     end_date = format.parse(str_arr.get(3));
                 } catch (ParseException e) {
@@ -333,6 +399,19 @@ public class Challenges extends RealmObject {
             } else {
                 clg.setDeadline(null);
                 clg.setTime_limit(0);
+            }
+            if (!str_arr.get(4).equals("")) { // have recurrent_period
+                int period = Integer.parseInt(str_arr.get(4));
+                clg.setRecurrent_period(period);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(start_date);
+                calendar.add(Calendar.DATE, period - 1);
+                clg.setDeadline(calendar.getTime());
+                clg.setIs_recurrent(1);
+            } else {
+                clg.setDeadline(null);
+                clg.setRecurrent_period(0);
+                clg.setIs_recurrent(0);
             }
             switch (rwd_arr.get(0)) { // reward type
                 case "Listed":
@@ -516,5 +595,21 @@ public class Challenges extends RealmObject {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getIs_recurrent() {
+        return is_recurrent;
+    }
+
+    public void setIs_recurrent(int is_recurrent) {
+        this.is_recurrent = is_recurrent;
+    }
+
+    public int getRecurrent_period() {
+        return recurrent_period;
+    }
+
+    public void setRecurrent_period(int recurrent_period) {
+        this.recurrent_period = recurrent_period;
     }
 }

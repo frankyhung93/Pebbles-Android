@@ -13,6 +13,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,7 +49,9 @@ public class ChallengeDetail extends BaseACA {
     TextView tv_dead_line;
     TextView tv_progress;
     TextView tv_reward;
+    TextView tv_period;
     LinearLayout steps_ll;
+    LinearLayout period_ll;
     Button action_btn;
     Button fail_btn;
 
@@ -68,8 +72,10 @@ public class ChallengeDetail extends BaseACA {
     EditText prize_gold;
     EditText prize_diamond;
     CheckBox time_limit;
+    CheckBox is_recurrent;
     EditText start_date;
     EditText dead_line;
+    EditText recurrent_period;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,9 +101,11 @@ public class ChallengeDetail extends BaseACA {
         tv_description = (TextView) findViewById(R.id.challenge_description);
         tv_start_date = (TextView) findViewById(R.id.challenge_start_date);
         tv_dead_line = (TextView) findViewById(R.id.challenge_dead_line);
+        tv_period = (TextView) findViewById(R.id.challenge_period);
         tv_progress = (TextView) findViewById(R.id.challenge_progress);
         tv_reward = (TextView) findViewById(R.id.challenge_reward);
         steps_ll = (LinearLayout) findViewById(R.id.steps_ll);
+        period_ll = (LinearLayout) findViewById(R.id.period_ll);
         action_btn = (Button) findViewById(R.id.action_btn);
         fail_btn = (Button) findViewById(R.id.fail_btn);
 
@@ -150,6 +158,33 @@ public class ChallengeDetail extends BaseACA {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.challenge, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete_challenge) {
+            if (challenge.deleteChallenge(realm, challenge.getId())) {
+                finish();
+            } else {
+                Log.d("CANNOT DELETE", "something fishy happened");
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void addStepRow(Challenge_steps step) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.step_row, null);
@@ -181,9 +216,12 @@ public class ChallengeDetail extends BaseACA {
         steps_container = (LinearLayout) dialogLayout.findViewById(R.id.steps_container);
         plus_btn = (Button) dialogLayout.findViewById(R.id.plus_btn);
         time_limit = (CheckBox) dialogLayout.findViewById(R.id.challenge_ckbox);
+        is_recurrent = (CheckBox) dialogLayout.findViewById(R.id.recurrent_ckbox);
         start_date = (EditText) dialogLayout.findViewById(R.id.eT_startdate);
         dead_line = (EditText) dialogLayout.findViewById(R.id.eT_enddate);
+        recurrent_period = (EditText) dialogLayout.findViewById(R.id.eT_period);
         dead_line.setVisibility(View.GONE); // initially not visible
+        recurrent_period.setVisibility(View.GONE); // initially not visible
 
         setDatePicker(start_date, this);
         setDatePicker(dead_line, this);
@@ -271,8 +309,23 @@ public class ChallengeDetail extends BaseACA {
                 if ( isChecked )
                 {
                     dead_line.setVisibility(View.VISIBLE);
+                    is_recurrent.setChecked(false);
                 } else {
+                    dead_line.setText("");
                     dead_line.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        is_recurrent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if ( isChecked ) {
+                    recurrent_period.setVisibility(View.VISIBLE);
+                    time_limit.setChecked(false);
+                } else {
+                    recurrent_period.setText("");
+                    recurrent_period.setVisibility(View.GONE);
                 }
             }
         });
@@ -321,7 +374,14 @@ public class ChallengeDetail extends BaseACA {
                         }
                         str_arr.add(start_date.getText().toString()); // str - 2
                         if (time_limit.isChecked()) {
-                            str_arr.add(dead_line.getText().toString()); // str - 3
+                            str_arr.add(dead_line.getText().toString()); // str - 3 (make empty text if none)
+                        } else {
+                            str_arr.add("");
+                        }
+                        if (is_recurrent.isChecked()) {
+                            str_arr.add(recurrent_period.getText().toString()); // str - 4 (make empty text if none)
+                        } else {
+                            str_arr.add("");
                         }
                         if (Challenges.editChallenge(realm, str_arr, rwd_arr, challenge_arr, challenge)) {
                             renewUI();
@@ -346,6 +406,7 @@ public class ChallengeDetail extends BaseACA {
                 break;
             case Challenges.type_counter:
                 challenge_type.setSelection(0);
+                challenge_counter.setText(""+challenge.getMax_counter());
                 break;
             case Challenges.type_steps:
                 challenge_type.setSelection(1);
@@ -373,6 +434,10 @@ public class ChallengeDetail extends BaseACA {
         if (challenge.getTime_limit() == 1) {
             time_limit.setChecked(true);
             dead_line.setText(format.format(challenge.getDeadline()));
+        }
+        if (challenge.getIs_recurrent() == 1) {
+            is_recurrent.setChecked(true);
+            recurrent_period.setText(""+challenge.getRecurrent_period());
         }
     }
 
@@ -482,7 +547,7 @@ public class ChallengeDetail extends BaseACA {
         tv_description.setText(challenge.getCha_desc());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         tv_start_date.setText(format.format(challenge.getStart_date()));
-        if (challenge.getTime_limit() == 1) {
+        if (challenge.getDeadline() != null) {
             tv_dead_line.setText(format.format(challenge.getDeadline()));
         } else {
             tv_dead_line.setText("No Time Limit");
@@ -494,6 +559,19 @@ public class ChallengeDetail extends BaseACA {
             tv_reward.setText(challenge.getCha_prize_diamond()+" Diamond");
         } else {
             tv_reward.setText(challenge.getLinked_rwd().getReward_name());
+        }
+        if (challenge.getIs_recurrent() == 1) {
+            Helper helper = new Helper();
+            tv_status.append(" "+helper.getEmojiByUnicode(helper.emoji_cyclone));
+            period_ll.setVisibility(View.VISIBLE);
+            tv_period.setText(""+challenge.getRecurrent_period());
+            if (challenge.getRecurrent_period() > 1) {
+                tv_period.append(" days");
+            } else {
+                tv_period.append(" day");
+            }
+        } else {
+            period_ll.setVisibility(View.GONE);
         }
     }
 

@@ -8,7 +8,43 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.pebblesappv2.RewardsList">
 
-    <include layout="@layout/appbar_layout"/>
+    <!--<include layout="@layout/appbar_layout"/>-->
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/general_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:id="@+id/rewards_toolbar_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="start"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="0dp">
+
+                <Spinner
+                    android:id="@+id/rewards_list_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/rwdlist_arrays"
+                    android:prompt="@string/reward_listing"
+                    android:popupBackground="@color/colorWhite"
+                    android:theme="@style/Spinner"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

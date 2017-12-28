@@ -168,5 +168,19 @@ android:layout_height="wrap_content">
             android:inputType="date"
             android:hint="Dead Line"/>
 
+        <CheckBox
+            android:id="@+id/recurrent_ckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Is Recurrent" />
+
+        <EditText
+            android:id="@+id/eT_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberSigned"
+            android:hint="Recurrent Period"/>
+
     </LinearLayout>
 </ScrollView>

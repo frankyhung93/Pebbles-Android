@@ -13,6 +13,14 @@
         <item name="android:colorControlNormal">@color/colorBlack</item>
     </style>
 
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
+    <style name="Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
     <style name="TransparentActionBar" parent="@android:style/Theme.Holo.Light">
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="android:background">@null</item>

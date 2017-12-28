@@ -142,6 +142,38 @@
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/period_ll"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:contentDescription="Recurrent Period"
+                android:src="@drawable/recurrent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="36dp" />
+
+            <TextView
+                android:id="@+id/challenge_period"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dp"
+                android:padding="6dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_weight="9"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/steps_ll"
             android:orientation="vertical"
             android:layout_width="match_parent"

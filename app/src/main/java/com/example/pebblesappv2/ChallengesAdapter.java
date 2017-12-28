@@ -58,8 +58,12 @@ public class ChallengesAdapter extends RecyclerView.Adapter<ChallengesAdapter.Vi
                 break;
         }
         viewHolder.challenge_status.setImageDrawable(status_drawable);
+        if (challenges.get(i).getIs_recurrent() == 1) {
+            Helper helper = new Helper();
+            viewHolder.challenge_name.append(" "+helper.getEmojiByUnicode(helper.emoji_cyclone));
+        }
 
-        runEnterAnimation(viewHolder.itemView, i);
+//        runEnterAnimation(viewHolder.itemView, i);
     }
 
     private void runEnterAnimation(View view, int order) {

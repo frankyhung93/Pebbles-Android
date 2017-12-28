@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="WeekPreferenceKey">com.example.pebblesappv2.WEEKDAYPREF</string>
     <string name="action_settings">Settings</string>
+    <string name="action_delete_challenge">Delete Challenge</string>
     <string name="music_title">Flows</string>
     <string name="search_list_title">Search List</string>
     <string name="songs_prefix">Songs: </string>
@@ -14,6 +15,7 @@
     <string name="res_cover_photo">Reward Cover Photo</string>
     <string name="choose_type">Choose a Challenge Type</string>
     <string name="reward_type">Choose a Reward Type</string>
+    <string name="reward_listing">Choose Reward Listing</string>
     <string name="reward">Choose a Reward</string>
 
     <string-array name="type_arrays">
@@ -25,6 +27,11 @@
         <item>Listed</item>
         <item>Gold</item>
         <item>Diamond</item>
+    </string-array>
+    <string-array name="rwdlist_arrays">
+        <item>All</item>
+        <item>Pending/Targeted</item>
+        <item>Redeemable/Redeemed</item>
     </string-array>
     <string-array name="rb_array">
         <item>rb01</item>

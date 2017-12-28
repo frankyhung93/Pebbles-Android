@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by ChunFaiHung on 2017/7/30.
@@ -38,11 +39,6 @@ public class BaseACA extends AppCompatActivity {
         Realm.init(this);
         realm = Realm.getDefaultInstance();
 
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-                        .build());
         super.onCreate(savedInstanceState);
     }
 
@@ -169,4 +165,5 @@ public class BaseACA extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Void... values) {}
     }
+
 }

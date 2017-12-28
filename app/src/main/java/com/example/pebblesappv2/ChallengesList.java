@@ -11,14 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.Slide;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -56,9 +54,10 @@ public class ChallengesList extends BaseACA {
     EditText prize_gold;
     EditText prize_diamond;
     CheckBox time_limit;
+    CheckBox is_recurrent;
     EditText start_date;
     EditText dead_line;
-
+    EditText recurrent_period;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class ChallengesList extends BaseACA {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // update challenges status
-        Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingChallenges(realm));
+        Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingRecurrentChallenges(realm));
 
         initViews();
 
@@ -86,6 +85,8 @@ public class ChallengesList extends BaseACA {
 
     @Override
     protected void onResume() {
+        // update challenges status
+        Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingRecurrentChallenges(realm));
         renewList();
         super.onResume();
     }
@@ -164,9 +165,12 @@ public class ChallengesList extends BaseACA {
         steps_container = (LinearLayout) dialogLayout.findViewById(R.id.steps_container);
         plus_btn = (Button) dialogLayout.findViewById(R.id.plus_btn);
         time_limit = (CheckBox) dialogLayout.findViewById(R.id.challenge_ckbox);
+        is_recurrent = (CheckBox) dialogLayout.findViewById(R.id.recurrent_ckbox);
         start_date = (EditText) dialogLayout.findViewById(R.id.eT_startdate);
         dead_line = (EditText) dialogLayout.findViewById(R.id.eT_enddate);
         dead_line.setVisibility(View.GONE); // initially not visible
+        recurrent_period = (EditText) dialogLayout.findViewById(R.id.eT_period);
+        recurrent_period.setVisibility(View.GONE); // initially not visible
 
         setDatePicker(start_date, this);
         setDatePicker(dead_line, this);
@@ -249,8 +253,25 @@ public class ChallengesList extends BaseACA {
                 if ( isChecked )
                 {
                     dead_line.setVisibility(View.VISIBLE);
+                    is_recurrent.setChecked(false);
                 } else {
+                    dead_line.setText("");
                     dead_line.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        is_recurrent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if ( isChecked ) {
+                    recurrent_period.setVisibility(View.VISIBLE);
+                    time_limit.setChecked(false);
+                } else {
+                    recurrent_period.setText("");
+                    recurrent_period.setVisibility(View.GONE);
                 }
             }
         });
@@ -301,7 +322,14 @@ public class ChallengesList extends BaseACA {
                         }
                         str_arr.add(start_date.getText().toString()); // str - 2
                         if (time_limit.isChecked()) {
-                            str_arr.add(dead_line.getText().toString()); // str - 3
+                            str_arr.add(dead_line.getText().toString()); // str - 3 (make empty text if none)
+                        } else {
+                            str_arr.add("");
+                        }
+                        if (is_recurrent.isChecked()) {
+                            str_arr.add(recurrent_period.getText().toString()); // str - 4 (make empty text if none)
+                        } else {
+                            str_arr.add("");
                         }
                         if (Challenges.addChallenge(realm, str_arr, rwd_arr, challenge_arr) > 0) {
                             renewList();
@@ -387,7 +415,7 @@ public class ChallengesList extends BaseACA {
         RealmResults<Challenges> challenges_rs = query.findAll().sort("deadline", Sort.ASCENDING);
         for (Challenges challenge : challenges_rs) {
             challenges.add(challenge);
-            Log.d("REWARD_DETAIL", challenge.toString());
+            Log.d("CHALLENGES", challenge.toString());
         }
         adapter.notifyDataSetChanged();
 

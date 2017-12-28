@@ -58,7 +58,7 @@ public class RewardsAdapter extends RecyclerView.Adapter<RewardsAdapter.ViewHold
                 break;
         }
         viewHolder.reward_status.setImageDrawable(status_drawable);
-        runEnterAnimation(viewHolder.itemView, i);
+//        runEnterAnimation(viewHolder.itemView, i);
     }
 
     private void runEnterAnimation(View view, int order) {

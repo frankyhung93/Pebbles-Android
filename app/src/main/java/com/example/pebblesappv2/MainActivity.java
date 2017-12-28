@@ -1,35 +1,23 @@
 package com.example.pebblesappv2;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-
-import io.realm.Realm;
 
 public class MainActivity extends BaseACA
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,13 +31,14 @@ public class MainActivity extends BaseACA
         Log.d("Current Time", (new Date()).toString());
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Log.d("MagCurrency INIT", (MagCurrency.initCurrency(realm)?"true":"false"));
         // Update challenges status
-        Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingChallenges(realm));
+        Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingRecurrentChallenges(realm));
 
         TextView tv_mag_gold = (TextView) findViewById(R.id.tv_mag_gold);
         TextView tv_mag_diamond = (TextView) findViewById(R.id.tv_mag_diamond);

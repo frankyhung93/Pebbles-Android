@@ -174,7 +174,7 @@ public class ChallengeDetail extends BaseACA {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete_challenge) {
-            if (challenge.deleteChallenge(realm, challenge.getId())) {
+            if (Challenges.deleteChallenge(realm, challenge.getId())) {
                 finish();
             } else {
                 Log.d("CANNOT DELETE", "something fishy happened");

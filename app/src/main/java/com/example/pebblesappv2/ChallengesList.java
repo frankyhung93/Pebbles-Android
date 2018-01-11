@@ -71,6 +71,11 @@ public class ChallengesList extends BaseACA {
         // update challenges status
         Challenges.updateAllChallengesStatus(realm, Challenges.returnAllPendingProgressingRecurrentChallenges(realm));
 
+//        Delete malfunctioning challenges
+//        Challenges.deleteChallenge(realm, 21);
+//        Challenges.deleteChallenge(realm, 22);
+//        Challenges.deleteChallenge(realm, 23);
+
         initViews();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_challenge);

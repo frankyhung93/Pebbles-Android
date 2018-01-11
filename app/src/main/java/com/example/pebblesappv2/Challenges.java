@@ -74,7 +74,7 @@ public class Challenges extends RealmObject {
         return clg;
     }
 
-    public boolean deleteChallenge(Realm rm, final int id) {
+    public static boolean deleteChallenge(Realm rm, final int id) {
         try {
             rm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -408,8 +408,12 @@ public class Challenges extends RealmObject {
                 calendar.add(Calendar.DATE, period - 1);
                 clg.setDeadline(calendar.getTime());
                 clg.setIs_recurrent(1);
-            } else {
+            } else if (str_arr.get(3).equals("")) {
                 clg.setDeadline(null);
+                clg.setTime_limit(0);
+                clg.setRecurrent_period(0);
+                clg.setIs_recurrent(0);
+            } else {
                 clg.setRecurrent_period(0);
                 clg.setIs_recurrent(0);
             }

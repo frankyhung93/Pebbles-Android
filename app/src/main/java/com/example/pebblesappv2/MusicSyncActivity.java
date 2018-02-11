@@ -54,7 +54,7 @@ import com.google.common.io.BaseEncoding;
 
 public class MusicSyncActivity extends BaseACA {
     Realm realm;
-    String staticIp = "192.168.1.130";
+    String staticIp = "kevingotyoutube.hopto.org:32725";
     String protocol = "http://";
     JSONArray jDlRsArray;
     JSONArray jTagRsArray;
@@ -336,7 +336,7 @@ public class MusicSyncActivity extends BaseACA {
                     // expect HTTP 200 OK, so we don't mistakenly save error report
                     // instead of the file
                     if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                        Log.d("HTTP CONNECTION", String.valueOf(connection.getResponseCode()));
+                        Log.d("HTTP CONNECTION", String.valueOf(connection.getResponseCode()) + " url: " + urlString);
                         return "Server returned HTTP " + connection.getResponseCode()
                                 + " " + connection.getResponseMessage();
                     }

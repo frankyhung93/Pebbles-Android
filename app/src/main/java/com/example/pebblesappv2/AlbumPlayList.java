@@ -51,7 +51,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
     Boolean isPlaying = false;
     MediaPlayer player = null;
     String folder_name = "youtube_music";
-    ArrayList<Uri> playlist = new ArrayList<>();
+    ArrayList<String> playlist = new ArrayList<>();
     Map<String, String> vid_ext_map = new HashMap<String, String>();
     Map<String, String> vid_title_map = new HashMap<String, String>();
 
@@ -74,7 +74,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
             Log.d("DEBUGS", "onServiceConnected - musicBound is "+musicBound);
             if (musicSrv.isPlayerSet() && (musicSrv.isPlaying() || musicSrv.isShuffling())) {
                 // show the appropriate song title
-                showPlayerBar(musicSrv.returnPlayingType(), getTitleFromVidId(getNameFromFilePath(musicSrv.returnCurrentUri().getPath())));
+                showPlayerBar(musicSrv.returnPlayingType(), getTitleFromVidId(getNameFromFilePath(musicSrv.returnCurrentUri())));
             }
         }
 
@@ -141,8 +141,8 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
             songs.add(song);
             String song_id = song.getVideo_id();
             String song_file = song_id + "." + vid_ext_map.get(song_id);
-            Uri myUri = Uri.parse(new File(getFilesDir() + File.separator + folder_name, song_file).toString());
-            playlist.add(myUri);
+            File tfile = new File(getFilesDir() + File.separator + folder_name, song_file);
+            playlist.add(tfile.toString());
         }
         final AlbumPlayListAdapter adapter = new AlbumPlayListAdapter(this, songs);
         mListView.setAdapter(adapter);
@@ -155,13 +155,20 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
                 String song_id = song.getVideo_id();
                 String song_title = song.getVideo_title();
                 String song_file = song_id + "." + vid_ext_map.get(song_id);
-                Uri myUri = Uri.parse(new File(getFilesDir() + File.separator + folder_name, song_file).toString()); // initialize Uri here
+                File tfile = new File(getFilesDir() + File.separator + folder_name, song_file);
+                if (tfile.exists()) {
+                    Log.d("FILEEXISTS", tfile.toString() + " Space: " + tfile.length());
+                } else {
+                    Log.d("FILENOTEXISTS", tfile.toString());
+                }
+                Uri myUri = Uri.parse(tfile.toString()); // initialize Uri here
 
                 // set song and play song, by calling the serv methods, also display the playerbar
                 musicSrv.setPlayingType(TYPE_PLAY);
                 musicSrv.setPlayingAlbum(receivedTitle);
                 showPlayerBar(TYPE_PLAY, song_title);
-                musicSrv.playSong(myUri);
+//                musicSrv.playSong(myUri);
+                musicSrv.playSong(tfile.toString());
 
             }
         });
@@ -201,7 +208,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         musicSrv.setPlayingType(TYPE_SHUFFLE);
         musicSrv.setPlayingAlbum(receivedTitle);
         Collections.shuffle(playlist);
-        showPlayerBar(TYPE_SHUFFLE, getTitleFromVidId(getNameFromFilePath(playlist.get(0).getPath())));
+        showPlayerBar(TYPE_SHUFFLE, getTitleFromVidId(getNameFromFilePath(playlist.get(0))));
         musicSrv.playShuffle(playlist);
     }
 
@@ -303,7 +310,7 @@ public class AlbumPlayList extends BaseACA implements PlayerBarFragment.OnFragme
         } else {
             if (musicSrv != null) {
                 Log.d("DEBUGS", "ON RESUME - musicSrc is not null");
-                showPlayerBar(musicSrv.returnPlayingType(), vid_title_map.get(getNameFromFilePath(musicSrv.returnCurrentUri().getPath())));
+                showPlayerBar(musicSrv.returnPlayingType(), vid_title_map.get(getNameFromFilePath(musicSrv.returnCurrentUri())));
             } else {
                 Log.d("DEBUGS", "ON RESUME - musicSrc is null");
                 startService(playIntent);

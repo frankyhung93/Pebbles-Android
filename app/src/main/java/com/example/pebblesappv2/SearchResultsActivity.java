@@ -64,7 +64,7 @@ public class SearchResultsActivity extends BaseACA implements PlayerBarFragment.
             Log.d("DEBUGS", "onServiceConnected - musicBound is "+musicBound);
             if (musicSrv.isPlayerSet() && (musicSrv.isPlaying() || musicSrv.isShuffling())) {
                 // show the appropriate song title
-                showPlayerBar(musicSrv.returnPlayingType(), getTitleFromVidId(getNameFromFilePath(musicSrv.returnCurrentUri().getPath())));
+                showPlayerBar(musicSrv.returnPlayingType(), getTitleFromVidId(getNameFromFilePath(musicSrv.returnCurrentUri())));
             }
         }
 
@@ -148,13 +148,20 @@ public class SearchResultsActivity extends BaseACA implements PlayerBarFragment.
                     String song_id = song.getVideo_id();
                     String song_title = song.getVideo_title();
                     String song_file = song_id + "." + vid_ext_map.get(song_id);
+                    File tfile = new File(getFilesDir() + File.separator + folder_name, song_file);
+                    if (tfile.exists()) {
+                        Log.d("FILEEXISTS", tfile.toString());
+                    } else {
+                        Log.d("FILENOTEXISTS", tfile.toString());
+                    }
                     Uri myUri = Uri.parse(new File(getFilesDir() + File.separator + folder_name, song_file).toString()); // initialize Uri here
 
                     // set song and play song, by calling the serv methods, also display the playerbar
                     musicSrv.setPlayingType(TYPE_PLAY);
                     musicSrv.setPlayingAlbum("search_list");
                     showPlayerBar(TYPE_PLAY, song_title);
-                    musicSrv.playSong(myUri);
+//                    musicSrv.playSong(myUri);
+                    musicSrv.playSong(tfile.toString());
 
                 }
             });

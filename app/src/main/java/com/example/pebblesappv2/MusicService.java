@@ -1,5 +1,7 @@
 package com.example.pebblesappv2;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -9,6 +11,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -28,22 +31,36 @@ public class MusicService extends Service implements
     private final IBinder musicBind = new MusicBinder();
     private Timer timer;
     private int playListCounter = 0;
-    private ArrayList<Uri> playlist = new ArrayList<>();
+    private ArrayList<String> playlist = new ArrayList<>();
     private boolean isShuffling = false;
-    private Uri currentUri;
+    private String currentUri;
     private String playingType;
     private String playingAlbum;
     
     public MusicService() {
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
     public void onCreate(){
-        //create the service
         //create the service
         super.onCreate();
         //initialize position
         songPosn=0;
         timer = new Timer();
+        //make service to be foreground
+        Intent notificationIntent = new Intent(this, AlbumPlayList.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.pb_iconv2)
+                .setContentTitle("Pebbles App")
+                .setContentText("Playing some music...")
+                .setContentIntent(pendingIntent).build();
+        startForeground(1337, notification);
         //create player
         player = new MediaPlayer();
         initMusicPlayer();
@@ -69,13 +86,14 @@ public class MusicService extends Service implements
         player.setOnErrorListener(this);
     }
 
-    public void playSong(Uri uri){
+    public void playSong(String uri){
         player.reset();
-        playlist = new ArrayList<Uri>();
+        playlist = new ArrayList<String>();
         isShuffling = false;
         //play a song
         try {
-            player.setDataSource(getApplicationContext(), uri);
+//            player.setDataSource(getApplicationContext(), uri);
+            player.setDataSource(uri);
             currentUri = uri;
         } catch (Exception e) {
             Log.e("MUSIC SERVICE", "Error setting data source", e);
@@ -83,11 +101,11 @@ public class MusicService extends Service implements
         player.prepareAsync();
     }
 
-    public void playShuffle(ArrayList<Uri> playlist) {
+    public void playShuffle(ArrayList<String> playlist) {
         this.playlist = playlist;
         player.reset();
         try {
-            player.setDataSource(getApplicationContext(), playlist.get(playListCounter));
+            player.setDataSource(playlist.get(playListCounter));
             currentUri = playlist.get(playListCounter);
             player.prepareAsync();
         } catch (Exception e) {
@@ -101,7 +119,7 @@ public class MusicService extends Service implements
         player.reset();
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
-            player.setDataSource(getApplicationContext(), playlist.get(++playListCounter));
+            player.setDataSource(playlist.get(++playListCounter));
             currentUri = playlist.get(playListCounter);
             player.prepareAsync();
             sendMessage(playlist.get(playListCounter));
@@ -113,7 +131,7 @@ public class MusicService extends Service implements
         player.reset();
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
-            player.setDataSource(getApplicationContext(), playlist.get(--playListCounter));
+            player.setDataSource(playlist.get(--playListCounter));
             currentUri = playlist.get(playListCounter);
             player.prepareAsync();
             sendMessage(playlist.get(playListCounter));
@@ -122,11 +140,11 @@ public class MusicService extends Service implements
         }
     }
 
-    private void sendMessage(Uri uri) {
+    private void sendMessage(String uri) {
         // The string "my-integer" will be used to filer the intent
         Intent intent = new Intent("Next-Song");
         // Adding some data
-        intent.putExtra("songPath", uri.getPath());
+        intent.putExtra("songPath", uri);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -156,7 +174,7 @@ public class MusicService extends Service implements
         return isShuffling;
     }
 
-    public Uri returnCurrentUri() { return currentUri; }
+    public String returnCurrentUri() { return currentUri; }
     
     public String returnPlayingType() { return playingType; }
     
